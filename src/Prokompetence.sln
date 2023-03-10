@@ -1,8 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{F7283123-1EEF-4002-9219-6117343F7B16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prokompetence.Web.PublicApi", "Web\Prokompetence.Web.PublicApi\Prokompetence.Web.PublicApi.csproj", "{447B4532-F5E7-42F1-AFAA-50AE953A4B20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{447B4532-F5E7-42F1-AFAA-50AE953A4B20} = {F7283123-1EEF-4002-9219-6117343F7B16}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{447B4532-F5E7-42F1-AFAA-50AE953A4B20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{447B4532-F5E7-42F1-AFAA-50AE953A4B20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{447B4532-F5E7-42F1-AFAA-50AE953A4B20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{447B4532-F5E7-42F1-AFAA-50AE953A4B20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
