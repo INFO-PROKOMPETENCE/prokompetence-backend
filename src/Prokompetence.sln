@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prokompetence.Web.PublicApi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{09E74CF4-4657-4241-AFE4-8FAF7153B032}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prokompetence.Model.PublicApi", "Prokompetence.Model.PublicApi\Prokompetence.Model.PublicApi.csproj", "{3B56F7CD-0307-4EB6-ACAC-49F7DAE68967}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prokompetence.Model.PublicApi", "Model\Prokompetence.Model.PublicApi\Prokompetence.Model.PublicApi.csproj", "{3B56F7CD-0307-4EB6-ACAC-49F7DAE68967}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
