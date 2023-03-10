@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Prokompetence.Model.PublicApi.Services;
 
 namespace Prokompetence.Web.PublicApi.Controllers;
 
@@ -6,9 +7,17 @@ namespace Prokompetence.Web.PublicApi.Controllers;
 [Route("api/hello-world")]
 public class HelloWorldController : ControllerBase
 {
-    [HttpGet]
-    public Task<IActionResult> Index()
+    private readonly IHelloWorldService helloWorldService;
+
+    public HelloWorldController(IHelloWorldService helloWorldService)
     {
-        return Task.FromResult<IActionResult>(Ok("Hello world!"));
+        this.helloWorldService = helloWorldService;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Index()
+    {
+        var message = await helloWorldService.GetHelloWorld();
+        return Ok(message);
     }
 }
