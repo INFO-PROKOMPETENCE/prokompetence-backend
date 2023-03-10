@@ -10,4 +10,8 @@
       <ProjectReference Include="..\..\Prokompetence.Model.PublicApi\Prokompetence.Model.PublicApi.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="LightInject.Microsoft.AspNetCore.Hosting" Version="2.3.5" />
+    </ItemGroup>
+
 </Project>
