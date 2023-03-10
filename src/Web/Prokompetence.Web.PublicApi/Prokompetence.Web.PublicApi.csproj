@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <PackageReference Include="LightInject.Microsoft.AspNetCore.Hosting" Version="2.3.5" />
+      <PackageReference Include="Mapster" Version="7.3.0" />
     </ItemGroup>
 
 </Project>

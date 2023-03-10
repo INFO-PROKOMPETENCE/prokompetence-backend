@@ -1,4 +1,5 @@
 ﻿using LightInject;
+using Mapster;
 using Prokompetence.Web.PublicApi.Extensions;
 
 namespace Prokompetence.Web.PublicApi;
@@ -8,6 +9,8 @@ public sealed class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
+
+        ConfigureMapster();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
@@ -28,5 +31,12 @@ public sealed class Startup
                 (serviceType, _) => serviceType.IsInterface
             );
         }
+    }
+
+    public static void ConfigureMapster()
+    {
+        TypeAdapterConfig.GlobalSettings.Scan(
+            AppDomain.CurrentDomain.GetAssembliesWithPrefixes(Constants.AssembliesPrefix));
+        TypeAdapterConfig.GlobalSettings.Compile();
     }
 }

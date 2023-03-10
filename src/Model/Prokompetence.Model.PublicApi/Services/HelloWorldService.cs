@@ -1,14 +1,17 @@
-﻿namespace Prokompetence.Model.PublicApi.Services;
+﻿using Prokompetence.Model.PublicApi.Models.HelloWorld;
+
+namespace Prokompetence.Model.PublicApi.Services;
 
 public interface IHelloWorldService
 {
-    Task<string> GetHelloWorld();
+    Task<string> GetHelloWorld(HelloWorldRequest helloWorldRequest);
 }
 
 public sealed class HelloWorldService : IHelloWorldService
 {
-    public Task<string> GetHelloWorld()
+    public Task<string> GetHelloWorld(HelloWorldRequest helloWorldRequest)
     {
-        return Task.FromResult("Hello world!");
+        var name = helloWorldRequest.Name ?? "World";
+        return Task.FromResult($"Hello {name}!");
     }
 }

@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Mapster;
+using Microsoft.AspNetCore.Mvc;
+using Prokompetence.Model.PublicApi.Models.HelloWorld;
 using Prokompetence.Model.PublicApi.Services;
+using Prokompetence.Web.PublicApi.Dto.HelloWorld;
 
 namespace Prokompetence.Web.PublicApi.Controllers;
 
@@ -15,9 +18,10 @@ public class HelloWorldController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index([FromQuery] HelloWorldDto dto)
     {
-        var message = await helloWorldService.GetHelloWorld();
+        var helloWorldRequest = dto.Adapt<HelloWorldRequest>();
+        var message = await helloWorldService.GetHelloWorld(helloWorldRequest);
         return Ok(message);
     }
 }
