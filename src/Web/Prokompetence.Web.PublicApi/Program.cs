@@ -1,6 +1,7 @@
 using System.Reflection;
 using LightInject.Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore;
+using Prokompetence.Common.Configuration;
 using Prokompetence.Web.PublicApi.Extensions;
 
 namespace Prokompetence.Web.PublicApi;

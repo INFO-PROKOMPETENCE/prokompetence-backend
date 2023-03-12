@@ -1,4 +1,4 @@
-﻿namespace Prokompetence.Web.PublicApi;
+﻿namespace Prokompetence.Common.Configuration;
 
 public static class Constants
 {
