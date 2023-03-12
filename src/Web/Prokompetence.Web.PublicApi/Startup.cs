@@ -5,16 +5,20 @@ using Mapster;
 using Microsoft.OpenApi.Models;
 using Prokompetence.Common.BclExtensions;
 using Prokompetence.Common.Configuration;
+using Prokompetence.DAL.EFCore;
+using Prokompetence.DAL.SqlServer;
 
 namespace Prokompetence.Web.PublicApi;
 
 public sealed class Startup
 {
     private readonly IWebHostEnvironment environment;
+    private readonly IConfiguration configuration;
 
-    public Startup(IWebHostEnvironment environment)
+    public Startup(IWebHostEnvironment environment, IConfiguration configuration)
     {
         this.environment = environment;
+        this.configuration = configuration;
     }
 
     public void ConfigureServices(IServiceCollection services)
@@ -72,6 +76,11 @@ public sealed class Startup
                 (serviceType, _) => serviceType.IsInterface
             );
         }
+
+        container.Register<ProkompetenceDbContext, SqlServerProkompetenceDbContext>(new PerRequestLifeTime());
+        container.Register<ConnectionStrings>(_ =>
+            configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>() ?? new ConnectionStrings(),
+            new PerContainerLifetime());
     }
 
     public static void ConfigureMapster()

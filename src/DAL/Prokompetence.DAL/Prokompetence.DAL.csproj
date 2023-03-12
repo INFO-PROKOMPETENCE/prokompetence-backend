@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\DAL\Prokompetence.DAL\Prokompetence.DAL.csproj" />
+      <ProjectReference Include="..\Prokompetence.DAL.Abstractions\Prokompetence.DAL.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>

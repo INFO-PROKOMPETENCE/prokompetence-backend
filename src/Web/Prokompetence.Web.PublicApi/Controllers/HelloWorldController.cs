@@ -21,12 +21,13 @@ public class HelloWorldController : ControllerBase
     /// Пример HTTP метода
     /// </summary>
     /// <param name="dto"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<IActionResult> Index([FromQuery] HelloWorldDto dto)
+    public async Task<IActionResult> Index([FromQuery] HelloWorldDto dto, CancellationToken cancellationToken)
     {
         var helloWorldRequest = dto.Adapt<HelloWorldRequest>();
-        var message = await helloWorldService.GetHelloWorld(helloWorldRequest);
+        var message = await helloWorldService.GetHelloWorld(helloWorldRequest, cancellationToken);
         return Ok(message);
     }
 }
