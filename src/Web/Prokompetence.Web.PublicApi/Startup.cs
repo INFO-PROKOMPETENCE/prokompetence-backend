@@ -1,7 +1,7 @@
 ﻿using LightInject;
 using Mapster;
+using Prokompetence.Common.BclExtensions;
 using Prokompetence.Common.Configuration;
-using Prokompetence.Web.PublicApi.Extensions;
 
 namespace Prokompetence.Web.PublicApi;
 

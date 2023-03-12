@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Prokompetence.Web.PublicApi.Extensions;
+namespace Prokompetence.Common.BclExtensions;
 
 public static class AppDomainExtensions
 {
