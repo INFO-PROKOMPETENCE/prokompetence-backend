@@ -11,7 +11,7 @@ public sealed class SqlServerProkompetenceDbContext : ProkompetenceDbContext
     {
     }
 
-    private SqlServerProkompetenceDbContext(DbContextOptions options)
+    public SqlServerProkompetenceDbContext(DbContextOptions options)
         : base(options)
     {
     }

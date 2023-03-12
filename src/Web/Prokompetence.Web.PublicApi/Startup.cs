@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using LightInject;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Prokompetence.Common.BclExtensions;
 using Prokompetence.Common.Configuration;
@@ -81,6 +82,11 @@ public sealed class Startup
         container.Register<ConnectionStrings>(_ =>
             configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>() ?? new ConnectionStrings(),
             new PerContainerLifetime());
+        using (var scope = container.BeginScope())
+        {
+            var dbContext = scope.GetInstance<ProkompetenceDbContext>();
+            dbContext.Database.Migrate();
+        }
     }
 
     public static void ConfigureMapster()
