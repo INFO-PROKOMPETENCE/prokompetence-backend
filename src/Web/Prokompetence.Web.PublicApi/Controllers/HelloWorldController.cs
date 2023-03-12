@@ -17,6 +17,11 @@ public class HelloWorldController : ControllerBase
         this.helloWorldService = helloWorldService;
     }
 
+    /// <summary>
+    /// Пример HTTP метода
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
     [HttpGet]
     public async Task<IActionResult> Index([FromQuery] HelloWorldDto dto)
     {

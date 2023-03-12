@@ -1,5 +1,7 @@
-﻿using LightInject;
+﻿using System.Reflection;
+using LightInject;
 using Mapster;
+using Microsoft.OpenApi.Models;
 using Prokompetence.Common.BclExtensions;
 using Prokompetence.Common.Configuration;
 
@@ -7,15 +9,47 @@ namespace Prokompetence.Web.PublicApi;
 
 public sealed class Startup
 {
+    private readonly IWebHostEnvironment environment;
+
+    public Startup(IWebHostEnvironment environment)
+    {
+        this.environment = environment;
+    }
+
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
+        if (environment.IsDevelopment())
+        {
+            services.AddSwaggerGen(configure =>
+            {
+                configure.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Prokompetence",
+                    Description = "Public API for Prokompetence"
+                });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                configure.IncludeXmlComments(xmlPath);
+            });
+        }
 
         ConfigureMapster();
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
+    public void Configure(IApplicationBuilder app)
     {
+        if (environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                options.RoutePrefix = "swagger";
+            });
+        }
+
         app.UseRouting();
         app.UseEndpoints(endpoints => endpoints.MapControllers());
     }
