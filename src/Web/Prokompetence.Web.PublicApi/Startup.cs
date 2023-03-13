@@ -4,9 +4,11 @@ using LightInject;
 using Mapster;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Prokompetence.Common.BclExtensions;
 using Prokompetence.Common.Configuration;
+using Prokompetence.Common.Security;
 using Prokompetence.DAL.EFCore;
 using Prokompetence.DAL.SqlServer;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -32,6 +34,24 @@ public sealed class Startup
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                var authenticationOptions =
+                    configuration.GetSection("Authentication").Get<AuthenticationOptions>()
+                    ?? throw new InvalidOperationException();
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = authenticationOptions.Issuer,
+                    ValidateAudience = true,
+                    ValidAudience = authenticationOptions.Audience,
+                    ValidateLifetime = true,
+                    IssuerSigningKey = JwtHelper.GetSymmetricSecurityKey(authenticationOptions.Key),
+                    ValidateIssuerSigningKey = true
+                };
+            });
+        services.AddAuthorization();
         if (environment.IsDevelopment())
         {
             services.AddSwaggerGen(ConfigureSwagger);
@@ -53,6 +73,10 @@ public sealed class Startup
         }
 
         app.UseRouting();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
         app.UseEndpoints(endpoints => endpoints.MapControllers());
     }
 

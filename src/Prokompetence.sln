@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prokompetence.DAL.EFCore", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prokompetence.DAL.SqlServer", "DAL\Prokompetence.DAL.SqlServer\Prokompetence.DAL.SqlServer.csproj", "{6553C15F-7242-4C78-BD09-AFE058C5FDD7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prokompetence.Common.Security", "Common\Prokompetence.Common.Security\Prokompetence.Common.Security.csproj", "{E0663779-EA27-450A-B06C-04D9A9EC968D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,7 @@ Global
 		{DEDC2EA9-2F83-4E00-BAD8-E5F132737812} = {83F3FF8D-5F76-4831-A46F-FB11B3C6582D}
 		{F22F00C6-A52F-4D68-BCF2-DE205ACE222C} = {83F3FF8D-5F76-4831-A46F-FB11B3C6582D}
 		{6553C15F-7242-4C78-BD09-AFE058C5FDD7} = {83F3FF8D-5F76-4831-A46F-FB11B3C6582D}
+		{E0663779-EA27-450A-B06C-04D9A9EC968D} = {6B138560-8039-40DC-9DD3-A5D45F4F1BCE}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{447B4532-F5E7-42F1-AFAA-50AE953A4B20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -72,5 +75,9 @@ Global
 		{6553C15F-7242-4C78-BD09-AFE058C5FDD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6553C15F-7242-4C78-BD09-AFE058C5FDD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6553C15F-7242-4C78-BD09-AFE058C5FDD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0663779-EA27-450A-B06C-04D9A9EC968D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0663779-EA27-450A-B06C-04D9A9EC968D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0663779-EA27-450A-B06C-04D9A9EC968D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0663779-EA27-450A-B06C-04D9A9EC968D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
