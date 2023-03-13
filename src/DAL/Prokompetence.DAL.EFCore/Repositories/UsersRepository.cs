@@ -10,6 +10,6 @@ public sealed class UsersRepository : Repository<User>, IUsersRepository
     {
     }
 
-    public Task<User?> FindByName(string name, CancellationToken cancellationToken)
-        => SingleOrDefault(u => u.Name == name, cancellationToken);
+    public Task<User?> FindByLogin(string name, CancellationToken cancellationToken)
+        => SingleOrDefault(u => u.Login == name, cancellationToken);
 }
