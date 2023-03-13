@@ -6,11 +6,15 @@ namespace Prokompetence.Common.Security;
 public static class CryptographyHelper
 {
     private static readonly Random Random = new();
+    private static readonly object RandomLock = new();
 
     public static byte[] GenerateRandomBytes(int length)
     {
         var result = new byte[length];
-        Random.NextBytes(result);
+        lock (RandomLock)
+        {
+            Random.NextBytes(result);
+        }
         return result;
     }
 
