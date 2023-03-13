@@ -9,6 +9,7 @@ public interface IUsersService
 {
     Task RegisterUser(UserRegistrationRequest request, CancellationToken cancellationToken);
     Task<SignInResult> SignIn(string login, string password, CancellationToken cancellationToken);
+    Task<RefreshTokenResult> RefreshToken(string login, string refreshToken, CancellationToken cancellationToken);
 }
 
 public sealed class UsersService : IUsersService
@@ -56,6 +57,25 @@ public sealed class UsersService : IUsersService
         {
             Success = true,
             RefreshToken = refreshToken
+        };
+    }
+
+    public async Task<RefreshTokenResult> RefreshToken(string login, string refreshToken,
+        CancellationToken cancellationToken)
+    {
+        var user = await repository.FindByLogin(login, cancellationToken);
+        if (user == null || user.RefreshToken != refreshToken)
+        {
+            return new RefreshTokenResult { Success = false };
+        }
+
+        var newRefreshToken = JwtHelper.GenerateRefreshToken();
+        user.RefreshToken = newRefreshToken;
+        await repository.Update(user, cancellationToken);
+        return new RefreshTokenResult
+        {
+            Success = true,
+            RefreshToken = newRefreshToken
         };
     }
 }

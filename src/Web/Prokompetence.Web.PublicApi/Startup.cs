@@ -108,7 +108,7 @@ public sealed class Startup
             dbContext.Database.Migrate();
         }
 
-        container.Register<SecurityTokenHandler, JwtSecurityTokenHandler>(new PerRequestLifeTime());
+        container.Register<JwtSecurityTokenHandler>(new PerRequestLifeTime());
     }
 
     public static void ConfigureMapster()

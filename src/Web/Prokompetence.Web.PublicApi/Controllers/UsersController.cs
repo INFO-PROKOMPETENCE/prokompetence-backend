@@ -16,12 +16,12 @@ namespace Prokompetence.Web.PublicApi.Controllers;
 public sealed class UsersController : ControllerBase
 {
     private readonly IUsersService usersService;
-    private readonly SecurityTokenHandler securityTokenHandler;
+    private readonly JwtSecurityTokenHandler securityTokenHandler;
     private readonly AuthenticationOptions authenticationOptions;
 
     public UsersController(
         IUsersService usersService,
-        SecurityTokenHandler securityTokenHandler,
+        JwtSecurityTokenHandler securityTokenHandler,
         AuthenticationOptions authenticationOptions
     )
     {
@@ -51,9 +51,39 @@ public sealed class UsersController : ControllerBase
             return Unauthorized();
         }
 
+        var accessToken = GenerateAccessToken(dto.Login);
+        return Ok(new AccessTokenDto(
+            accessToken,
+            result.RefreshToken ?? throw new InvalidOperationException()
+        ));
+    }
+
+    [HttpPost]
+    [Route("refresh-token")]
+    public async Task<ActionResult<AccessTokenDto>> RefreshToken([FromBody] RefreshTokenDto dto,
+        CancellationToken cancellationToken)
+    {
+        var token = securityTokenHandler.ReadJwtToken(dto.AccessToken);
+        var user = new ClaimsPrincipal(new ClaimsIdentity(token.Claims));
+        var login = user.Claims.Single(c => c.Type == ClaimTypes.Name).Value;
+        var result = await usersService.RefreshToken(login, dto.RefreshToken, cancellationToken);
+        if (!result.Success)
+        {
+            return BadRequest("Invalid refresh token");
+        }
+
+        var accessToken = GenerateAccessToken(login);
+        return Ok(new AccessTokenDto(
+            accessToken,
+            result.RefreshToken ?? throw new InvalidOperationException()
+        ));
+    }
+
+    private string GenerateAccessToken(string login)
+    {
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Name, dto.Login)
+            new(ClaimTypes.Name, login)
         };
         var jwt = new JwtSecurityToken
         (
@@ -65,9 +95,6 @@ public sealed class UsersController : ControllerBase
                 SecurityAlgorithms.HmacSha256)
         );
         var accessToken = securityTokenHandler.WriteToken(jwt);
-        return Ok(new AccessTokenDto(
-            accessToken,
-            result.RefreshToken ?? throw new InvalidOperationException()
-        ));
+        return accessToken;
     }
 }
