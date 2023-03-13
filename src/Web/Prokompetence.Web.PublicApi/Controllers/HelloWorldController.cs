@@ -20,7 +20,6 @@ public class HelloWorldController : ControllerBase
     /// <summary>
     /// Пример HTTP метода
     /// </summary>
-    /// <param name="dto"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
