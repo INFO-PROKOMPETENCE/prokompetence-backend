@@ -48,6 +48,7 @@ public sealed class Startup
                     ValidateAudience = true,
                     ValidAudience = authenticationOptions.Audience,
                     ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
                     IssuerSigningKey = JwtHelper.GetSymmetricSecurityKey(authenticationOptions.Key),
                     ValidateIssuerSigningKey = true
                 };
