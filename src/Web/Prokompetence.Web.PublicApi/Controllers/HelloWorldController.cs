@@ -1,8 +1,8 @@
-﻿using Mapster;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Prokompetence.Model.PublicApi.Models.HelloWorld;
 using Prokompetence.Model.PublicApi.Services;
-using Prokompetence.Web.PublicApi.Dto.HelloWorld;
 
 namespace Prokompetence.Web.PublicApi.Controllers;
 
@@ -24,9 +24,13 @@ public class HelloWorldController : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<IActionResult> Index([FromQuery] HelloWorldDto dto, CancellationToken cancellationToken)
+    [Authorize]
+    public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        var helloWorldRequest = dto.Adapt<HelloWorldRequest>();
+        var helloWorldRequest = new HelloWorldRequest
+        {
+            Name = User.Claims.Single(c => c.Type == ClaimTypes.Name).Value
+        };
         var message = await helloWorldService.GetHelloWorld(helloWorldRequest, cancellationToken);
         return Ok(message);
     }

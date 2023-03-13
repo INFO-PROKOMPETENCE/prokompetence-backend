@@ -20,7 +20,7 @@ public sealed class HelloWorldService : IHelloWorldService
 
     public async Task<string> GetHelloWorld(HelloWorldRequest helloWorldRequest, CancellationToken cancellationToken)
     {
-        var name = helloWorldRequest.Name ?? "World";
+        var name = helloWorldRequest.Name;
         var user = await usersRepository.FindByLogin(name, cancellationToken) ?? new User { Login = "World" };
 
         return $"Hello, {user.Login}!";

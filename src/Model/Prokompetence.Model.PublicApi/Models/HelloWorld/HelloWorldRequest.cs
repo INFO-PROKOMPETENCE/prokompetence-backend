@@ -2,5 +2,5 @@
 
 public class HelloWorldRequest
 {
-    public string? Name { get; set; }
+    public string Name { get; set; }
 }
