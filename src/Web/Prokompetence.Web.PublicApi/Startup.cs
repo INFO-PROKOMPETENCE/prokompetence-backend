@@ -95,7 +95,8 @@ public sealed class Startup
 
         container.Register<ProkompetenceDbContext, SqlServerProkompetenceDbContext>(new PerRequestLifeTime());
         container.Register<ConnectionStrings>(_ =>
-                configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>() ?? new ConnectionStrings(),
+                configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>()
+                ?? throw new InvalidOperationException(),
             new PerContainerLifetime());
         using (var scope = container.BeginScope())
         {

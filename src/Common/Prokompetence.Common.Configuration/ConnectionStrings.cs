@@ -1,6 +1,3 @@
 ﻿namespace Prokompetence.Common.Configuration;
 
-public sealed class ConnectionStrings
-{
-    public string Prokompetence { get; set; }
-}
+public sealed record ConnectionStrings(string Prokompetence);
