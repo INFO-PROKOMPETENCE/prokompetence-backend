@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using System.Text.Json.Serialization;
 using LightInject;
 using Mapster;
@@ -98,11 +99,16 @@ public sealed class Startup
                 configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>()
                 ?? throw new InvalidOperationException(),
             new PerContainerLifetime());
+        container.Register<AuthenticationOptions>(_ =>
+            configuration.GetSection("Authentication").Get<AuthenticationOptions>()
+            ?? throw new InvalidOperationException());
         using (var scope = container.BeginScope())
         {
             var dbContext = scope.GetInstance<ProkompetenceDbContext>();
             dbContext.Database.Migrate();
         }
+
+        container.Register<SecurityTokenHandler, JwtSecurityTokenHandler>(new PerRequestLifeTime());
     }
 
     public static void ConfigureMapster()

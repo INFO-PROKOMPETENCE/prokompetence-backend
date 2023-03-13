@@ -5,5 +5,5 @@ namespace Prokompetence.DAL.Repositories;
 
 public interface IUsersRepository : IRepository<User>
 {
-    Task<User?> FindByLogin(string name, CancellationToken cancellationToken);
+    Task<User?> FindByLogin(string login, CancellationToken cancellationToken);
 }
