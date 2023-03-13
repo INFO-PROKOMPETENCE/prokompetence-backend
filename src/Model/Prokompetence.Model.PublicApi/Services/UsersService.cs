@@ -8,7 +8,7 @@ namespace Prokompetence.Model.PublicApi.Services;
 public interface IUsersService
 {
     Task RegisterUser(UserRegistrationRequest request, CancellationToken cancellationToken);
-    Task<bool> SignIn(string login, string password, CancellationToken cancellationToken);
+    Task<SignInResult> SignIn(string login, string password, CancellationToken cancellationToken);
 }
 
 public sealed class UsersService : IUsersService
@@ -35,15 +35,27 @@ public sealed class UsersService : IUsersService
         await repository.Add(user, cancellationToken);
     }
 
-    public async Task<bool> SignIn(string login, string password, CancellationToken cancellationToken)
+    public async Task<SignInResult> SignIn(string login, string password, CancellationToken cancellationToken)
     {
         var user = await repository.FindByLogin(login, cancellationToken);
         if (user == null)
         {
-            return false;
+            return new SignInResult { Success = false };
         }
 
         var inputPasswordHash = CryptographyHelper.GenerateMd5Hash(password, user.PasswordSalt);
-        return inputPasswordHash.SequenceEqual(user.PasswordHash);
+        if (!inputPasswordHash.SequenceEqual(user.PasswordHash))
+        {
+            return new SignInResult { Success = false };
+        }
+
+        var refreshToken = JwtHelper.GenerateRefreshToken();
+        user.RefreshToken = refreshToken;
+        await repository.Update(user, cancellationToken);
+        return new SignInResult
+        {
+            Success = true,
+            RefreshToken = refreshToken
+        };
     }
 }

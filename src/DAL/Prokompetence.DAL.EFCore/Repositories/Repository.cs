@@ -19,6 +19,12 @@ public abstract class Repository<TEntity> : ReadonlyRepository<TEntity>, IReposi
         return result.Entity;
     }
 
+    public async Task Update(TEntity entity, CancellationToken cancellationToken)
+    {
+        Items.Update(entity);
+        await Context.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken)
     {
         await Items.AddRangeAsync(entities, cancellationToken);

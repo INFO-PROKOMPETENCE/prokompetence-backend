@@ -46,7 +46,7 @@ public sealed class UsersController : ControllerBase
         CancellationToken cancellationToken)
     {
         var result = await usersService.SignIn(dto.Login, dto.Password, cancellationToken);
-        if (!result)
+        if (!result.Success)
         {
             return Unauthorized();
         }
@@ -65,6 +65,9 @@ public sealed class UsersController : ControllerBase
                 SecurityAlgorithms.HmacSha256)
         );
         var accessToken = securityTokenHandler.WriteToken(jwt);
-        return Ok(new AccessTokenDto(accessToken, "refreshToken"));
+        return Ok(new AccessTokenDto(
+            accessToken,
+            result.RefreshToken ?? throw new InvalidOperationException()
+        ));
     }
 }

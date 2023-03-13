@@ -5,11 +5,12 @@ namespace Prokompetence.Common.Security;
 
 public static class CryptographyHelper
 {
+    private static readonly Random Random = new();
+
     public static byte[] GenerateRandomBytes(int length)
     {
-        var random = new Random();
         var result = new byte[length];
-        random.NextBytes(result);
+        Random.NextBytes(result);
         return result;
     }
 
