@@ -2,12 +2,14 @@
 using System.Text.Json.Serialization;
 using LightInject;
 using Mapster;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Prokompetence.Common.BclExtensions;
 using Prokompetence.Common.Configuration;
 using Prokompetence.DAL.EFCore;
 using Prokompetence.DAL.SqlServer;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Prokompetence.Web.PublicApi;
 
@@ -32,18 +34,7 @@ public sealed class Startup
             });
         if (environment.IsDevelopment())
         {
-            services.AddSwaggerGen(configure =>
-            {
-                configure.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "Prokompetence",
-                    Description = "Public API for Prokompetence"
-                });
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                configure.IncludeXmlComments(xmlPath);
-            });
+            services.AddSwaggerGen(ConfigureSwagger);
         }
 
         ConfigureMapster();
@@ -80,7 +71,7 @@ public sealed class Startup
 
         container.Register<ProkompetenceDbContext, SqlServerProkompetenceDbContext>(new PerRequestLifeTime());
         container.Register<ConnectionStrings>(_ =>
-            configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>() ?? new ConnectionStrings(),
+                configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>() ?? new ConnectionStrings(),
             new PerContainerLifetime());
         using (var scope = container.BeginScope())
         {
@@ -94,5 +85,40 @@ public sealed class Startup
         TypeAdapterConfig.GlobalSettings.Scan(
             AppDomain.CurrentDomain.GetAssembliesWithPrefixes(Constants.AssembliesPrefix));
         TypeAdapterConfig.GlobalSettings.Compile();
+    }
+
+    private static void ConfigureSwagger(SwaggerGenOptions options)
+    {
+        options.SwaggerDoc("v1", new OpenApiInfo
+        {
+            Version = "v1",
+            Title = "Prokompetence",
+            Description = "Public API for Prokompetence"
+        });
+        var jwtSecurityScheme = new OpenApiSecurityScheme
+        {
+            BearerFormat = "JWT",
+            Name = "JWT Authentication",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.Http,
+            Scheme = JwtBearerDefaults.AuthenticationScheme,
+            Description = "Put access token here",
+
+            Reference = new OpenApiReference
+            {
+                Id = JwtBearerDefaults.AuthenticationScheme,
+                Type = ReferenceType.SecurityScheme
+            }
+        };
+
+        options.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            { jwtSecurityScheme, Array.Empty<string>() }
+        });
+        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        options.IncludeXmlComments(xmlPath);
     }
 }
