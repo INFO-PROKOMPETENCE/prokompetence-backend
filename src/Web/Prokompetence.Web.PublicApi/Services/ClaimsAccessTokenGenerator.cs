@@ -41,6 +41,11 @@ public sealed class ClaimsAccessTokenGenerator : IAccessTokenGenerator
 
     public UserIdentityModel? TryGetUserModelFromAccessToken(string accessToken)
     {
+        if (!securityTokenHandler.CanReadToken(accessToken))
+        {
+            return null;
+        }
+
         var token = securityTokenHandler.ReadJwtToken(accessToken);
         var user = new ClaimsPrincipal(new ClaimsIdentity(token.Claims));
         var loginClaim = user.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Name);
