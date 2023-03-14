@@ -1,6 +1,8 @@
-﻿using Prokompetence.Common.Security;
+﻿using Mapster;
+using Prokompetence.Common.Security;
 using Prokompetence.DAL.Entities;
 using Prokompetence.DAL.Repositories;
+using Prokompetence.Model.PublicApi.Interfaces;
 using Prokompetence.Model.PublicApi.Models.Users;
 
 namespace Prokompetence.Model.PublicApi.Services;
@@ -9,16 +11,18 @@ public interface IUsersService
 {
     Task RegisterUser(UserRegistrationRequest request, CancellationToken cancellationToken);
     Task<SignInResult> SignIn(string login, string password, CancellationToken cancellationToken);
-    Task<RefreshTokenResult> RefreshToken(string login, string refreshToken, CancellationToken cancellationToken);
+    Task<RefreshTokenResult> RefreshToken(string accessToken, string refreshToken, CancellationToken cancellationToken);
 }
 
 public sealed class UsersService : IUsersService
 {
     private readonly IUsersRepository repository;
+    private readonly IAccessTokenGenerator accessTokenGenerator;
 
-    public UsersService(IUsersRepository repository)
+    public UsersService(IUsersRepository repository, IAccessTokenGenerator accessTokenGenerator)
     {
         this.repository = repository;
+        this.accessTokenGenerator = accessTokenGenerator;
     }
 
     public async Task RegisterUser(UserRegistrationRequest request, CancellationToken cancellationToken)
@@ -53,17 +57,26 @@ public sealed class UsersService : IUsersService
         var refreshToken = JwtHelper.GenerateRefreshToken();
         user.RefreshToken = refreshToken;
         await repository.Update(user, cancellationToken);
+        var userModel = user.Adapt<UserIdentityModel>();
+        var accessToken = accessTokenGenerator.GenerateAccessToken(userModel);
         return new SignInResult
         {
             Success = true,
+            AccessToken = accessToken,
             RefreshToken = refreshToken
         };
     }
 
-    public async Task<RefreshTokenResult> RefreshToken(string login, string refreshToken,
+    public async Task<RefreshTokenResult> RefreshToken(string accessToken, string refreshToken,
         CancellationToken cancellationToken)
     {
-        var user = await repository.FindByLogin(login, cancellationToken);
+        var userModel = accessTokenGenerator.TryGetUserModelFromAccessToken(accessToken);
+        if (userModel == null)
+        {
+            return new RefreshTokenResult { Success = false };
+        }
+
+        var user = await repository.FindByLogin(userModel.Login, cancellationToken);
         if (user == null || user.RefreshToken != refreshToken)
         {
             return new RefreshTokenResult { Success = false };
@@ -72,9 +85,12 @@ public sealed class UsersService : IUsersService
         var newRefreshToken = JwtHelper.GenerateRefreshToken();
         user.RefreshToken = newRefreshToken;
         await repository.Update(user, cancellationToken);
+        userModel = user.Adapt<UserIdentityModel>();
+        var newAccessToken = accessTokenGenerator.GenerateAccessToken(userModel);
         return new RefreshTokenResult
         {
             Success = true,
+            AccessToken = newAccessToken,
             RefreshToken = newRefreshToken
         };
     }
