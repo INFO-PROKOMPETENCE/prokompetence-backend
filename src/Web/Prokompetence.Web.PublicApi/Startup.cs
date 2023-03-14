@@ -64,6 +64,7 @@ public sealed class Startup
 
     public void Configure(IApplicationBuilder app)
     {
+        app.UseHttpsRedirection();
         if (environment.IsDevelopment())
         {
             app.UseSwagger();
