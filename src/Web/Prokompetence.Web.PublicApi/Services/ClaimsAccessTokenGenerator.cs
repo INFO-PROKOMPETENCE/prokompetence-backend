@@ -31,7 +31,7 @@ public sealed class ClaimsAccessTokenGenerator : IAccessTokenGenerator
             issuer: authenticationOptions.Issuer,
             audience: authenticationOptions.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(2),
+            expires: DateTime.UtcNow.Add(authenticationOptions.JwtTokenLifeTime),
             signingCredentials: new SigningCredentials(JwtHelper.GetSymmetricSecurityKey(authenticationOptions.Key),
                 SecurityAlgorithms.HmacSha256)
         );

@@ -3,5 +3,6 @@
 public sealed record AuthenticationOptions(
     string Issuer,
     string Audience,
-    string Key
+    string Key,
+    TimeSpan JwtTokenLifeTime
 );
