@@ -54,16 +54,14 @@ public sealed class UsersService : IUsersService
             return new SignInResult { Success = false };
         }
 
-        var refreshToken = JwtHelper.GenerateRefreshToken();
-        user.RefreshToken = refreshToken;
-        await repository.Update(user, cancellationToken);
         var userModel = user.Adapt<UserIdentityModel>();
         var accessToken = accessTokenGenerator.GenerateAccessToken(userModel);
+        user.RefreshToken = accessToken.RefreshToken;
+        await repository.Update(user, cancellationToken);
         return new SignInResult
         {
             Success = true,
-            AccessToken = accessToken,
-            RefreshToken = refreshToken
+            Result = accessToken
         };
     }
 
@@ -82,16 +80,13 @@ public sealed class UsersService : IUsersService
             return new RefreshTokenResult { Success = false };
         }
 
-        var newRefreshToken = JwtHelper.GenerateRefreshToken();
-        user.RefreshToken = newRefreshToken;
-        await repository.Update(user, cancellationToken);
-        userModel = user.Adapt<UserIdentityModel>();
         var newAccessToken = accessTokenGenerator.GenerateAccessToken(userModel);
+        user.RefreshToken = newAccessToken.RefreshToken;
+        await repository.Update(user, cancellationToken);
         return new RefreshTokenResult
         {
             Success = true,
-            AccessToken = newAccessToken,
-            RefreshToken = newRefreshToken
+            Result = newAccessToken
         };
     }
 }

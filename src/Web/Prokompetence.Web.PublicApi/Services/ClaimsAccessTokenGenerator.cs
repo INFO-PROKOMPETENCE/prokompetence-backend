@@ -20,23 +20,30 @@ public sealed class ClaimsAccessTokenGenerator : IAccessTokenGenerator
         this.authenticationOptions = authenticationOptions;
     }
 
-    public string GenerateAccessToken(UserIdentityModel userIdentity)
+    public AccessTokenResult GenerateAccessToken(UserIdentityModel userIdentity)
     {
         var claims = new List<Claim>
         {
             new(ClaimTypes.Name, userIdentity.Login)
         };
+        var expires = DateTime.UtcNow.Add(authenticationOptions.JwtTokenLifeTime);
         var jwt = new JwtSecurityToken
         (
             issuer: authenticationOptions.Issuer,
             audience: authenticationOptions.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.Add(authenticationOptions.JwtTokenLifeTime),
+            expires: expires,
             signingCredentials: new SigningCredentials(JwtHelper.GetSymmetricSecurityKey(authenticationOptions.Key),
                 SecurityAlgorithms.HmacSha256)
         );
         var accessToken = securityTokenHandler.WriteToken(jwt);
-        return accessToken;
+        var refreshToken = JwtHelper.GenerateRefreshToken();
+        return new AccessTokenResult
+        {
+            AccessToken = accessToken,
+            RefreshToken = refreshToken,
+            Expires = expires
+        };
     }
 
     public UserIdentityModel? TryGetUserModelFromAccessToken(string accessToken)

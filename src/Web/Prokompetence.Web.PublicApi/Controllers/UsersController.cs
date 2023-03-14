@@ -39,10 +39,7 @@ public sealed class UsersController : ControllerBase
             return Unauthorized();
         }
 
-        return Ok(new AccessTokenDto(
-            result.AccessToken ?? throw new InvalidOperationException(),
-            result.RefreshToken ?? throw new InvalidOperationException()
-        ));
+        return Ok(result.Result?.Adapt<AccessTokenDto>());
     }
 
     [HttpPost]
@@ -56,9 +53,6 @@ public sealed class UsersController : ControllerBase
             return BadRequest("Invalid refresh token");
         }
 
-        return Ok(new AccessTokenDto(
-            result.AccessToken ?? throw new InvalidOperationException(),
-            result.RefreshToken ?? throw new InvalidOperationException()
-        ));
+        return Ok(result.Result?.Adapt<AccessTokenDto>());
     }
 }

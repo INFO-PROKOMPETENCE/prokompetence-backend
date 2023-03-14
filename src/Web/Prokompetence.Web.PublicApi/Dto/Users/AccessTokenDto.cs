@@ -2,5 +2,6 @@
 
 public sealed record AccessTokenDto(
     string AccessToken,
-    string RefreshToken
+    string RefreshToken,
+    DateTime Expires
 );
