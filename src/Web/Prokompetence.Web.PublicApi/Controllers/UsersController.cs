@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Prokompetence.Model.PublicApi.Models.Users;
 using Prokompetence.Model.PublicApi.Services;
@@ -54,5 +55,15 @@ public sealed class UsersController : ControllerBase
         }
 
         return Ok(result.Result?.Adapt<AccessTokenDto>());
+    }
+
+    [HttpGet]
+    [Route("current")]
+    [Authorize]
+    public async Task<ActionResult<UserDto>> GetCurrentUser(CancellationToken cancellationToken)
+    {
+        var login = User.Claims.Single(c => c.Type == ClaimTypes.Name).Value;
+        var user = await usersService.GetUserByLogin(login, cancellationToken);
+        return Ok(user.Adapt<UserDto>());
     }
 }

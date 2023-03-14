@@ -12,6 +12,7 @@ public interface IUsersService
     Task RegisterUser(UserRegistrationRequest request, CancellationToken cancellationToken);
     Task<SignInResult> SignIn(string login, string password, CancellationToken cancellationToken);
     Task<RefreshTokenResult> RefreshToken(string accessToken, string refreshToken, CancellationToken cancellationToken);
+    Task<UserModel> GetUserByLogin(string login, CancellationToken cancellationToken);
 }
 
 public sealed class UsersService : IUsersService
@@ -87,6 +88,20 @@ public sealed class UsersService : IUsersService
         {
             Success = true,
             Result = newAccessToken
+        };
+    }
+
+    public async Task<UserModel> GetUserByLogin(string login, CancellationToken cancellationToken)
+    {
+        var user = await repository.FindByLogin(login, cancellationToken);
+        if (user is null)
+        {
+            throw new Exception($"User with login {login} not found");
+        }
+
+        return new UserModel
+        {
+            Name = user.Login
         };
     }
 }
