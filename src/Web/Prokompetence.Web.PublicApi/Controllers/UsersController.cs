@@ -19,6 +19,12 @@ public sealed class UsersController : ControllerBase
         this.usersService = usersService;
     }
 
+    /// <summary>
+    /// Register new user
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpPost]
     [Route("register")]
     public async Task<IActionResult> Registration([FromBody] UserRegistrationDto dto,
@@ -29,6 +35,12 @@ public sealed class UsersController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Get accessToken and refreshToken by login and password
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpPost]
     [Route("login")]
     public async Task<ActionResult<AccessTokenDto>> Login([FromBody] UserLoginDto dto,
@@ -43,6 +55,12 @@ public sealed class UsersController : ControllerBase
         return Ok(result.Result?.Adapt<AccessTokenDto>());
     }
 
+    /// <summary>
+    /// Refresh accessToken
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpPost]
     [Route("refresh-token")]
     public async Task<ActionResult<AccessTokenDto>> RefreshToken([FromBody] RefreshTokenDto dto,
@@ -57,6 +75,11 @@ public sealed class UsersController : ControllerBase
         return Ok(result.Result?.Adapt<AccessTokenDto>());
     }
 
+    /// <summary>
+    /// Get base information about current user
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     [HttpGet]
     [Route("current")]
     [Authorize]
