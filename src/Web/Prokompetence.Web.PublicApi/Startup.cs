@@ -97,13 +97,17 @@ public sealed class Startup
         }
 
         container.Register<ProkompetenceDbContext, SqlServerProkompetenceDbContext>(new PerRequestLifeTime());
-        container.Register<ConnectionStrings>(_ =>
-                configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>()
-                ?? throw new InvalidOperationException(),
-            new PerContainerLifetime());
-        container.Register<AuthenticationOptions>(_ =>
-            configuration.GetSection("Authentication").Get<AuthenticationOptions>()
-            ?? throw new InvalidOperationException());
+        container.Register<IConfiguration>(_ => configuration, new PerContainerLifetime());
+        var settingsTypes =
+            assemblies.SelectMany(a => a.GetTypes().Where(t => t.GetCustomAttribute<SettingsAttribute>() != null));
+        foreach (var settingsType in settingsTypes)
+        {
+            container.Register(settingsType,
+                factory => factory.GetInstance<IConfiguration>()
+                    .GetSection(settingsType.GetCustomAttribute<SettingsAttribute>()!.Scope ?? settingsType.Name)
+                    .Get(settingsType), new PerContainerLifetime());
+        }
+
         using (var scope = container.BeginScope())
         {
             var dbContext = scope.GetInstance<ProkompetenceDbContext>();
