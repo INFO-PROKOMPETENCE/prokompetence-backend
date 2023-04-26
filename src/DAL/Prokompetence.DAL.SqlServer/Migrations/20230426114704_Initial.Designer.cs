@@ -12,7 +12,7 @@ using Prokompetence.DAL.SqlServer;
 namespace Prokompetence.DAL.SqlServer.Migrations
 {
     [DbContext(typeof(SqlServerProkompetenceDbContext))]
-    [Migration("20230426104407_Initial")]
+    [Migration("20230426114704_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -28,10 +28,7 @@ namespace Prokompetence.DAL.SqlServer.Migrations
             modelBuilder.Entity("Prokompetence.DAL.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -40,6 +37,28 @@ namespace Prokompetence.DAL.SqlServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "User"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Student"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Customer"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("Prokompetence.DAL.Entities.User", b =>
