@@ -13,6 +13,7 @@ public interface IProjectService
         CancellationToken cancellationToken);
 
     Task<ProjectHeaderModel?> FindProjectHeaderById(Guid projectId, CancellationToken cancellationToken);
+    Task<ProjectInformationModel?> FindProjectInformationById(Guid projectId, CancellationToken cancellationToken);
 }
 
 public sealed class ProjectService : IProjectService
@@ -69,6 +70,17 @@ public sealed class ProjectService : IProjectService
         return await dbContext.Projects.AsNoTracking()
             .Where(p => p.Id == projectId)
             .ProjectToType<ProjectHeaderModel>()
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<ProjectInformationModel?> FindProjectInformationById(Guid projectId,
+        CancellationToken cancellationToken)
+    {
+        return await dbContext.Projects.AsNoTracking()
+            .Include(p => p.Records)
+            .ThenInclude(p => p.Project)
+            .Where(p => p.Id == projectId)
+            .ProjectToType<ProjectInformationModel>()
             .FirstOrDefaultAsync(cancellationToken);
     }
 }

@@ -8,6 +8,13 @@ public interface IProkompetenceDbContext : IUnitOfWork
     DbSet<User> Users { get; set; }
     DbSet<Role> Roles { get; set; }
     DbSet<Project> Projects { get; set; }
+    DbSet<Team> Teams { get; set; }
+    DbSet<TeamProjectRecord> TeamProjectRecords { get; set; }
+    DbSet<KeyTechnology> KeyTechnologies { get; set; }
+    DbSet<LifeScenario> LifeScenarios { get; set; }
+    DbSet<Organization> Organizations { get; set; }
+    DbSet<StudentInTeam> StudentsInTeam { get; set; }
+    DbSet<TeamRole> TeamRoles { get; set; }
 }
 
 public abstract class ProkompetenceDbContext : DbContext, IProkompetenceDbContext
@@ -22,6 +29,11 @@ public abstract class ProkompetenceDbContext : DbContext, IProkompetenceDbContex
     public DbSet<Project> Projects { get; set; }
     public DbSet<Team> Teams { get; set; }
     public DbSet<TeamProjectRecord> TeamProjectRecords { get; set; }
+    public DbSet<KeyTechnology> KeyTechnologies { get; set; }
+    public DbSet<LifeScenario> LifeScenarios { get; set; }
+    public DbSet<Organization> Organizations { get; set; }
+    public DbSet<StudentInTeam> StudentsInTeam { get; set; }
+    public DbSet<TeamRole> TeamRoles { get; set; }
 
 
     public new async Task SaveChangesAsync(CancellationToken cancellationToken)

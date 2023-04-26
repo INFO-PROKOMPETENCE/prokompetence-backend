@@ -9,4 +9,5 @@ public sealed class Team
     public User TeamLead { get; set; }
 
     public ISet<TeamProjectRecord> Records { get; set; }
+    public ISet<StudentInTeam> Students { get; set; }
 }

@@ -32,7 +32,7 @@ public sealed class ProjectController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{projectId:guid}")]
+    [Route("{projectId:guid}/header")]
     public async Task<IActionResult> GetProjectHeader([FromRoute] Guid projectId, CancellationToken cancellationToken)
     {
         var header = await projectService.FindProjectHeaderById(projectId, cancellationToken);
@@ -42,5 +42,19 @@ public sealed class ProjectController : ControllerBase
         }
 
         return Ok(header.Adapt<ProjectHeaderDto>());
+    }
+
+    [HttpGet]
+    [Route("{projectId:guid}/information")]
+    public async Task<IActionResult> GetProjectInformation([FromRoute] Guid projectId,
+        CancellationToken cancellationToken)
+    {
+        var project = await projectService.FindProjectInformationById(projectId, cancellationToken);
+        if (project is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(project.Adapt<ProjectInformationDto>());
     }
 }
