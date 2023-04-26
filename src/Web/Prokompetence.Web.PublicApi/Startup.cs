@@ -59,6 +59,8 @@ public sealed class Startup
             services.AddSwaggerGen(ConfigureSwagger);
         }
 
+        services.AddHttpContextAccessor();
+
         ConfigureMapster();
     }
 

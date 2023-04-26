@@ -63,10 +63,11 @@ public sealed class UsersController : ControllerBase
     /// <returns></returns>
     [HttpPost]
     [Route("refresh-token")]
+    [Authorize]
     public async Task<ActionResult<AccessTokenDto>> RefreshToken([FromBody] RefreshTokenDto dto,
         CancellationToken cancellationToken)
     {
-        var result = await usersService.RefreshToken(dto.AccessToken, dto.RefreshToken, cancellationToken);
+        var result = await usersService.RefreshToken(dto.RefreshToken, cancellationToken);
         if (!result.Success)
         {
             return BadRequest("Invalid refresh token");

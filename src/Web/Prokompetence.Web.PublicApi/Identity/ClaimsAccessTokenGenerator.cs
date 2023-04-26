@@ -6,7 +6,7 @@ using Prokompetence.Common.Security;
 using Prokompetence.Model.PublicApi.Interfaces;
 using Prokompetence.Model.PublicApi.Models.Users;
 
-namespace Prokompetence.Web.PublicApi.Services;
+namespace Prokompetence.Web.PublicApi.Identity;
 
 public sealed class ClaimsAccessTokenGenerator : IAccessTokenGenerator
 {
@@ -24,7 +24,9 @@ public sealed class ClaimsAccessTokenGenerator : IAccessTokenGenerator
     {
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Name, userIdentity.Login)
+            new(IdentityConstants.Id, userIdentity.Id.ToString()),
+            new(IdentityConstants.Login, userIdentity.Login),
+            new(IdentityConstants.Role, userIdentity.Role)
         };
         var expires = DateTime.UtcNow.Add(authenticationOptions.JwtTokenLifeTime);
         var jwt = new JwtSecurityToken
@@ -43,27 +45,6 @@ public sealed class ClaimsAccessTokenGenerator : IAccessTokenGenerator
             AccessToken = accessToken,
             RefreshToken = refreshToken,
             Expires = expires
-        };
-    }
-
-    public UserIdentityModel? TryGetUserModelFromAccessToken(string accessToken)
-    {
-        if (!securityTokenHandler.CanReadToken(accessToken))
-        {
-            return null;
-        }
-
-        var token = securityTokenHandler.ReadJwtToken(accessToken);
-        var user = new ClaimsPrincipal(new ClaimsIdentity(token.Claims));
-        var loginClaim = user.Claims.SingleOrDefault(c => c.Type == ClaimTypes.Name);
-        if (loginClaim == null)
-        {
-            return null;
-        }
-
-        return new UserIdentityModel
-        {
-            Login = loginClaim.Value
         };
     }
 }

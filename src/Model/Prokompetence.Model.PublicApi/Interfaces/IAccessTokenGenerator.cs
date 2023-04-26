@@ -5,5 +5,4 @@ namespace Prokompetence.Model.PublicApi.Interfaces;
 public interface IAccessTokenGenerator
 {
     AccessTokenResult GenerateAccessToken(UserIdentityModel userIdentity);
-    UserIdentityModel? TryGetUserModelFromAccessToken(string accessToken);
 }

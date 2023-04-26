@@ -11,7 +11,7 @@ public interface IUsersService
 {
     Task RegisterUser(UserRegistrationRequest request, CancellationToken cancellationToken);
     Task<SignInResult> SignIn(string login, string password, CancellationToken cancellationToken);
-    Task<RefreshTokenResult> RefreshToken(string accessToken, string refreshToken, CancellationToken cancellationToken);
+    Task<RefreshTokenResult> RefreshToken(string refreshToken, CancellationToken cancellationToken);
     Task<UserModel> GetUserByLogin(string login, CancellationToken cancellationToken);
 }
 
@@ -19,11 +19,15 @@ public sealed class UsersService : IUsersService
 {
     private readonly IUsersRepository repository;
     private readonly IAccessTokenGenerator accessTokenGenerator;
+    private readonly Func<IContextUserProvider> contextUserProviderFactory;
 
-    public UsersService(IUsersRepository repository, IAccessTokenGenerator accessTokenGenerator)
+    public UsersService(IUsersRepository repository,
+        IAccessTokenGenerator accessTokenGenerator,
+        Func<IContextUserProvider> contextUserProviderFactory)
     {
         this.repository = repository;
         this.accessTokenGenerator = accessTokenGenerator;
+        this.contextUserProviderFactory = contextUserProviderFactory;
     }
 
     public async Task RegisterUser(UserRegistrationRequest request, CancellationToken cancellationToken)
@@ -55,7 +59,12 @@ public sealed class UsersService : IUsersService
             return new SignInResult { Success = false };
         }
 
-        var userModel = user.Adapt<UserIdentityModel>();
+        var userModel = new UserIdentityModel
+        {
+            Id = user.Id,
+            Login = user.Login,
+            Role = ""
+        };
         var accessToken = accessTokenGenerator.GenerateAccessToken(userModel);
         user.RefreshToken = accessToken.RefreshToken;
         await repository.Update(user, cancellationToken);
@@ -66,15 +75,9 @@ public sealed class UsersService : IUsersService
         };
     }
 
-    public async Task<RefreshTokenResult> RefreshToken(string accessToken, string refreshToken,
-        CancellationToken cancellationToken)
+    public async Task<RefreshTokenResult> RefreshToken(string refreshToken, CancellationToken cancellationToken)
     {
-        var userModel = accessTokenGenerator.TryGetUserModelFromAccessToken(accessToken);
-        if (userModel == null)
-        {
-            return new RefreshTokenResult { Success = false };
-        }
-
+        var userModel = contextUserProviderFactory.Invoke().GetUser();
         var user = await repository.FindByLogin(userModel.Login, cancellationToken);
         if (user == null || user.RefreshToken != refreshToken)
         {
