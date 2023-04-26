@@ -1,5 +1,4 @@
-﻿using Mapster;
-using Prokompetence.Common.Security;
+﻿using Prokompetence.Common.Security;
 using Prokompetence.DAL.Entities;
 using Prokompetence.DAL.Repositories;
 using Prokompetence.Model.PublicApi.Interfaces;
@@ -17,15 +16,18 @@ public interface IUsersService
 
 public sealed class UsersService : IUsersService
 {
-    private readonly IUsersRepository repository;
+    private readonly IUsersRepository usersRepository;
+    private readonly IRolesRepository rolesRepository;
     private readonly IAccessTokenGenerator accessTokenGenerator;
     private readonly Func<IContextUserProvider> contextUserProviderFactory;
 
-    public UsersService(IUsersRepository repository,
+    public UsersService(IUsersRepository usersRepository,
+        IRolesRepository rolesRepository,
         IAccessTokenGenerator accessTokenGenerator,
         Func<IContextUserProvider> contextUserProviderFactory)
     {
-        this.repository = repository;
+        this.usersRepository = usersRepository;
+        this.rolesRepository = rolesRepository;
         this.accessTokenGenerator = accessTokenGenerator;
         this.contextUserProviderFactory = contextUserProviderFactory;
     }
@@ -36,18 +38,20 @@ public sealed class UsersService : IUsersService
         var password = request.Password;
         var passwordSalt = CryptographyHelper.GenerateRandomBytes(8);
         var passwordHash = CryptographyHelper.GenerateMd5Hash(password, passwordSalt);
+        var role = await rolesRepository.GetByName("User", cancellationToken);
         var user = new User
         {
             Login = login,
             PasswordHash = passwordHash,
-            PasswordSalt = passwordSalt
+            PasswordSalt = passwordSalt,
+            Role = role
         };
-        await repository.Add(user, cancellationToken);
+        await usersRepository.Add(user, cancellationToken);
     }
 
     public async Task<SignInResult> SignIn(string login, string password, CancellationToken cancellationToken)
     {
-        var user = await repository.FindByLogin(login, cancellationToken);
+        var user = await usersRepository.FindByLogin(login, cancellationToken);
         if (user == null)
         {
             return new SignInResult { Success = false };
@@ -67,7 +71,7 @@ public sealed class UsersService : IUsersService
         };
         var accessToken = accessTokenGenerator.GenerateAccessToken(userModel);
         user.RefreshToken = accessToken.RefreshToken;
-        await repository.Update(user, cancellationToken);
+        await usersRepository.Update(user, cancellationToken);
         return new SignInResult
         {
             Success = true,
@@ -78,7 +82,7 @@ public sealed class UsersService : IUsersService
     public async Task<RefreshTokenResult> RefreshToken(string refreshToken, CancellationToken cancellationToken)
     {
         var userModel = contextUserProviderFactory.Invoke().GetUser();
-        var user = await repository.FindByLogin(userModel.Login, cancellationToken);
+        var user = await usersRepository.FindByLogin(userModel.Login, cancellationToken);
         if (user == null || user.RefreshToken != refreshToken)
         {
             return new RefreshTokenResult { Success = false };
@@ -86,7 +90,7 @@ public sealed class UsersService : IUsersService
 
         var newAccessToken = accessTokenGenerator.GenerateAccessToken(userModel);
         user.RefreshToken = newAccessToken.RefreshToken;
-        await repository.Update(user, cancellationToken);
+        await usersRepository.Update(user, cancellationToken);
         return new RefreshTokenResult
         {
             Success = true,
@@ -96,7 +100,7 @@ public sealed class UsersService : IUsersService
 
     public async Task<UserModel> GetUserByLogin(string login, CancellationToken cancellationToken)
     {
-        var user = await repository.FindByLogin(login, cancellationToken);
+        var user = await usersRepository.FindByLogin(login, cancellationToken);
         if (user is null)
         {
             throw new Exception($"User with login {login} not found");
