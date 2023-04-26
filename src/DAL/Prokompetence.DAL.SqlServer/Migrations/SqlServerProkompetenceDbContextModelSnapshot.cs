@@ -22,6 +22,23 @@ namespace Prokompetence.DAL.SqlServer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Prokompetence.DAL.Entities.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("Prokompetence.DAL.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -53,26 +70,9 @@ namespace Prokompetence.DAL.SqlServer.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Prokompetence.DAL.Entities.UserRole", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserRole");
-                });
-
             modelBuilder.Entity("Prokompetence.DAL.Entities.User", b =>
                 {
-                    b.HasOne("Prokompetence.DAL.Entities.UserRole", "Role")
+                    b.HasOne("Prokompetence.DAL.Entities.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -81,7 +81,7 @@ namespace Prokompetence.DAL.SqlServer.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Prokompetence.DAL.Entities.UserRole", b =>
+            modelBuilder.Entity("Prokompetence.DAL.Entities.Role", b =>
                 {
                     b.Navigation("Users");
                 });

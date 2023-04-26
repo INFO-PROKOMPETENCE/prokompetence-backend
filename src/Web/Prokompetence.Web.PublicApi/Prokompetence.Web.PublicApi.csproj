@@ -12,7 +12,6 @@
       <ProjectReference Include="..\..\Common\Prokompetence.Common.BclExtensions\Prokompetence.Common.BclExtensions.csproj" />
       <ProjectReference Include="..\..\Common\Prokompetence.Common.Configuration\Prokompetence.Common.Configuration.csproj" />
       <ProjectReference Include="..\..\Common\Prokompetence.Common.Security\Prokompetence.Common.Security.csproj" />
-      <ProjectReference Include="..\..\DAL\Prokompetence.DAL.EFCore\Prokompetence.DAL.EFCore.csproj" />
       <ProjectReference Include="..\..\DAL\Prokompetence.DAL.SqlServer\Prokompetence.DAL.SqlServer.csproj" />
       <ProjectReference Include="..\..\Model\Prokompetence.Model.PublicApi\Prokompetence.Model.PublicApi.csproj" />
     </ItemGroup>

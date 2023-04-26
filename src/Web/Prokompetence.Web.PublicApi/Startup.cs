@@ -10,7 +10,7 @@ using Microsoft.OpenApi.Models;
 using Prokompetence.Common.BclExtensions;
 using Prokompetence.Common.Configuration;
 using Prokompetence.Common.Security;
-using Prokompetence.DAL.EFCore;
+using Prokompetence.DAL;
 using Prokompetence.DAL.SqlServer;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -98,7 +98,7 @@ public sealed class Startup
             );
         }
 
-        container.Register<ProkompetenceDbContext, SqlServerProkompetenceDbContext>(new PerRequestLifeTime());
+        container.Register<IProkompetenceDbContext, SqlServerProkompetenceDbContext>(new PerRequestLifeTime());
         container.Register<IConfiguration>(_ => configuration, new PerContainerLifetime());
         var settingsTypes =
             assemblies.SelectMany(a => a.GetTypes().Where(t => t.GetCustomAttribute<SettingsAttribute>() != null));
@@ -112,7 +112,7 @@ public sealed class Startup
 
         using (var scope = container.BeginScope())
         {
-            var dbContext = scope.GetInstance<ProkompetenceDbContext>();
+            var dbContext = (ProkompetenceDbContext)scope.GetInstance<IProkompetenceDbContext>();
             dbContext.Database.Migrate();
         }
 

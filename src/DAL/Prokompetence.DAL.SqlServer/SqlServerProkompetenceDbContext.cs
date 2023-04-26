@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Prokompetence.Common.Configuration;
-using Prokompetence.DAL.EFCore;
 
 namespace Prokompetence.DAL.SqlServer;
 

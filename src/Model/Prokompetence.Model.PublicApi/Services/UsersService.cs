@@ -16,18 +16,18 @@ public interface IUsersService
 
 public sealed class UsersService : IUsersService
 {
-    private readonly IUsersRepository usersRepository;
-    private readonly IRolesRepository rolesRepository;
+    private readonly IUserRepository userRepository;
+    private readonly IRoleRepository roleRepository;
     private readonly IAccessTokenGenerator accessTokenGenerator;
     private readonly Func<IContextUserProvider> contextUserProviderFactory;
 
-    public UsersService(IUsersRepository usersRepository,
-        IRolesRepository rolesRepository,
+    public UsersService(IUserRepository userRepository,
+        IRoleRepository roleRepository,
         IAccessTokenGenerator accessTokenGenerator,
         Func<IContextUserProvider> contextUserProviderFactory)
     {
-        this.usersRepository = usersRepository;
-        this.rolesRepository = rolesRepository;
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.accessTokenGenerator = accessTokenGenerator;
         this.contextUserProviderFactory = contextUserProviderFactory;
     }
@@ -38,20 +38,20 @@ public sealed class UsersService : IUsersService
         var password = request.Password;
         var passwordSalt = CryptographyHelper.GenerateRandomBytes(8);
         var passwordHash = CryptographyHelper.GenerateMd5Hash(password, passwordSalt);
-        var role = await rolesRepository.GetByName("User", cancellationToken);
+        var role = await roleRepository.GetByName("User", cancellationToken);
         var user = new User
         {
             Login = login,
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
-            Role = role
+            RoleId = role.Id
         };
-        await usersRepository.Add(user, cancellationToken);
+        await userRepository.Add(user, cancellationToken);
     }
 
     public async Task<SignInResult> SignIn(string login, string password, CancellationToken cancellationToken)
     {
-        var user = await usersRepository.FindByLogin(login, cancellationToken);
+        var user = await userRepository.FindByLogin(login, cancellationToken);
         if (user == null)
         {
             return new SignInResult { Success = false };
@@ -67,11 +67,11 @@ public sealed class UsersService : IUsersService
         {
             Id = user.Id,
             Login = user.Login,
-            Role = ""
+            Role = user.Role.Name
         };
         var accessToken = accessTokenGenerator.GenerateAccessToken(userModel);
         user.RefreshToken = accessToken.RefreshToken;
-        await usersRepository.Update(user, cancellationToken);
+        await userRepository.Update(user, cancellationToken);
         return new SignInResult
         {
             Success = true,
@@ -82,7 +82,7 @@ public sealed class UsersService : IUsersService
     public async Task<RefreshTokenResult> RefreshToken(string refreshToken, CancellationToken cancellationToken)
     {
         var userModel = contextUserProviderFactory.Invoke().GetUser();
-        var user = await usersRepository.FindByLogin(userModel.Login, cancellationToken);
+        var user = await userRepository.FindByLogin(userModel.Login, cancellationToken);
         if (user == null || user.RefreshToken != refreshToken)
         {
             return new RefreshTokenResult { Success = false };
@@ -90,7 +90,7 @@ public sealed class UsersService : IUsersService
 
         var newAccessToken = accessTokenGenerator.GenerateAccessToken(userModel);
         user.RefreshToken = newAccessToken.RefreshToken;
-        await usersRepository.Update(user, cancellationToken);
+        await userRepository.Update(user, cancellationToken);
         return new RefreshTokenResult
         {
             Success = true,
@@ -100,7 +100,7 @@ public sealed class UsersService : IUsersService
 
     public async Task<UserModel> GetUserByLogin(string login, CancellationToken cancellationToken)
     {
-        var user = await usersRepository.FindByLogin(login, cancellationToken);
+        var user = await userRepository.FindByLogin(login, cancellationToken);
         if (user is null)
         {
             throw new Exception($"User with login {login} not found");
