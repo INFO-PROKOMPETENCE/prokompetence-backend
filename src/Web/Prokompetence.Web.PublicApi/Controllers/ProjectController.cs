@@ -30,4 +30,17 @@ public sealed class ProjectController : ControllerBase
             TotalCount = projectHeaders.TotalCount
         });
     }
+
+    [HttpGet]
+    [Route("{projectId:guid}")]
+    public async Task<IActionResult> GetProjectHeader([FromRoute] Guid projectId, CancellationToken cancellationToken)
+    {
+        var header = await projectService.FindProjectHeaderById(projectId, cancellationToken);
+        if (header is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(header.Adapt<ProjectHeaderDto>());
+    }
 }

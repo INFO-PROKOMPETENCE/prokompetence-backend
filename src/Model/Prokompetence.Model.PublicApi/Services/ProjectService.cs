@@ -11,6 +11,8 @@ public interface IProjectService
 {
     Task<ListResponseModel<ProjectHeaderModel>> GetProjects(ProjectHeadersQuery queryParams,
         CancellationToken cancellationToken);
+
+    Task<ProjectHeaderModel?> FindProjectHeaderById(Guid projectId, CancellationToken cancellationToken);
 }
 
 public sealed class ProjectService : IProjectService
@@ -60,5 +62,13 @@ public sealed class ProjectService : IProjectService
 
             TotalCount = await query.CountAsync(cancellationToken)
         };
+    }
+
+    public async Task<ProjectHeaderModel?> FindProjectHeaderById(Guid projectId, CancellationToken cancellationToken)
+    {
+        return await dbContext.Projects.AsNoTracking()
+            .Where(p => p.Id == projectId)
+            .ProjectToType<ProjectHeaderModel>()
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }
