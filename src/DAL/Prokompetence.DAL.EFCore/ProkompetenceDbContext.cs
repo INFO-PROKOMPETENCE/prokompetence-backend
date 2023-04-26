@@ -11,4 +11,5 @@ public abstract class ProkompetenceDbContext : DbContext
     }
 
     public DbSet<User> Users { get; set; }
+    public DbSet<UserRole> Roles { get; set; }
 }
