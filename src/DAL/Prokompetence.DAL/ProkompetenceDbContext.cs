@@ -20,6 +20,8 @@ public abstract class ProkompetenceDbContext : DbContext, IProkompetenceDbContex
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<Project> Projects { get; set; }
+    public DbSet<Team> Teams { get; set; }
+    public DbSet<TeamProjectRecord> TeamProjectRecords { get; set; }
 
 
     public new async Task SaveChangesAsync(CancellationToken cancellationToken)

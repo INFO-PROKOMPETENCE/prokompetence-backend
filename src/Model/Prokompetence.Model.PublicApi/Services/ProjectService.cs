@@ -43,8 +43,7 @@ public sealed class ProjectService : IProjectService
 
         if (queryParams.IsFree.HasValue)
         {
-            // TODO: сделать проверку, что проект не занят другими командами
-            query = query;
+            query = query.Where(p => p.Records.Count < p.MaxTeamsCount);
         }
 
         if (!string.IsNullOrWhiteSpace(queryParams.NameStarting))

@@ -22,4 +22,6 @@ public sealed class Project
 
     public int KeyTechnologyId { get; set; }
     public KeyTechnology KeyTechnology { get; set; }
+
+    public ISet<TeamProjectRecord> Records { get; set; }
 }
