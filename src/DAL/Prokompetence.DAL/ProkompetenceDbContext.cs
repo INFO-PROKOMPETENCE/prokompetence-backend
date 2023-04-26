@@ -3,7 +3,7 @@ using Prokompetence.DAL.Entities;
 
 namespace Prokompetence.DAL;
 
-public interface IProkompetenceDbContext : IDbContext
+public interface IProkompetenceDbContext : IUnitOfWork
 {
     DbSet<User> Users { get; set; }
     DbSet<Role> Roles { get; set; }

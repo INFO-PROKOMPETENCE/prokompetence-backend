@@ -98,7 +98,8 @@ public sealed class Startup
             );
         }
 
-        container.Register<IProkompetenceDbContext, SqlServerProkompetenceDbContext>(new PerRequestLifeTime());
+        container.Register<IProkompetenceDbContext, SqlServerProkompetenceDbContext>(new PerScopeLifetime());
+        container.Register<IUnitOfWork>(factory => factory.GetInstance<IProkompetenceDbContext>(), new PerScopeLifetime());
         container.Register<IConfiguration>(_ => configuration, new PerContainerLifetime());
         var settingsTypes =
             assemblies.SelectMany(a => a.GetTypes().Where(t => t.GetCustomAttribute<SettingsAttribute>() != null));

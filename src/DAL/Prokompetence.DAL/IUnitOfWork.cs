@@ -1,6 +1,6 @@
 ﻿namespace Prokompetence.DAL;
 
-public interface IDbContext
+public interface IUnitOfWork
 {
     Task SaveChangesAsync(CancellationToken cancellationToken);
 }

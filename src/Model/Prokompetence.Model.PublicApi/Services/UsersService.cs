@@ -1,4 +1,5 @@
 ﻿using Prokompetence.Common.Security;
+using Prokompetence.DAL;
 using Prokompetence.DAL.Entities;
 using Prokompetence.DAL.Repositories;
 using Prokompetence.Model.PublicApi.Interfaces;
@@ -20,16 +21,19 @@ public sealed class UsersService : IUsersService
     private readonly IRoleRepository roleRepository;
     private readonly IAccessTokenGenerator accessTokenGenerator;
     private readonly Func<IContextUserProvider> contextUserProviderFactory;
+    private readonly IUnitOfWork unitOfWork;
 
     public UsersService(IUserRepository userRepository,
         IRoleRepository roleRepository,
         IAccessTokenGenerator accessTokenGenerator,
-        Func<IContextUserProvider> contextUserProviderFactory)
+        Func<IContextUserProvider> contextUserProviderFactory,
+        IUnitOfWork unitOfWork)
     {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.accessTokenGenerator = accessTokenGenerator;
         this.contextUserProviderFactory = contextUserProviderFactory;
+        this.unitOfWork = unitOfWork;
     }
 
     public async Task RegisterUser(UserRegistrationRequest request, CancellationToken cancellationToken)
@@ -47,6 +51,7 @@ public sealed class UsersService : IUsersService
             RoleId = role.Id
         };
         await userRepository.Add(user, cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<SignInResult> SignIn(string login, string password, CancellationToken cancellationToken)
@@ -71,7 +76,7 @@ public sealed class UsersService : IUsersService
         };
         var accessToken = accessTokenGenerator.GenerateAccessToken(userModel);
         user.RefreshToken = accessToken.RefreshToken;
-        await userRepository.Update(user, cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
         return new SignInResult
         {
             Success = true,
@@ -90,7 +95,7 @@ public sealed class UsersService : IUsersService
 
         var newAccessToken = accessTokenGenerator.GenerateAccessToken(userModel);
         user.RefreshToken = newAccessToken.RefreshToken;
-        await userRepository.Update(user, cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
         return new RefreshTokenResult
         {
             Success = true,
