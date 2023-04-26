@@ -1,8 +1,10 @@
-﻿namespace Prokompetence.Web.PublicApi.Identity;
+﻿using System.Security.Claims;
+
+namespace Prokompetence.Web.PublicApi.Identity;
 
 public static class IdentityConstants
 {
-    public const string Id = "pId";
-    public const string Login = "pLogin";
-    public const string Role = "pRole";
+    public const string Id = "id";
+    public const string Login = ClaimTypes.Name;
+    public const string Role = ClaimTypes.Role;
 }
