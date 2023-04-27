@@ -45,6 +45,7 @@ public sealed class UsersService : IUsersService
         var role = await roleRepository.GetByName("User", cancellationToken);
         var user = new User
         {
+            Name = request.Name,
             Login = login,
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
@@ -113,7 +114,7 @@ public sealed class UsersService : IUsersService
 
         return new UserModel
         {
-            Name = user.Login
+            Name = user.Name
         };
     }
 }
