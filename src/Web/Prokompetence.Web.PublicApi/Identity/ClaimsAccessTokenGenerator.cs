@@ -26,8 +26,9 @@ public sealed class ClaimsAccessTokenGenerator : IAccessTokenGenerator
         {
             new(IdentityConstants.Id, userIdentity.Id.ToString()),
             new(IdentityConstants.Login, userIdentity.Login),
-            new(IdentityConstants.Role, userIdentity.Role)
         };
+        var roleClaims = userIdentity.Roles.Select(role => new Claim(IdentityConstants.Role, role));
+        claims.AddRange(roleClaims);
         var expires = DateTime.UtcNow.Add(authenticationOptions.JwtTokenLifeTime);
         var jwt = new JwtSecurityToken
         (

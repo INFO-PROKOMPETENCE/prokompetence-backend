@@ -25,7 +25,8 @@ public sealed class UserRepository : IUserRepository
 
     public async Task<User?> FindByLogin(string login, CancellationToken cancellationToken)
         => await context.Users
-            .Include(u => u.Role)
+            .Include(u => u.Roles)
+            .ThenInclude(r => r.Role)
             .Where(u => u.Login == login)
             .SingleOrDefaultAsync(cancellationToken);
 }

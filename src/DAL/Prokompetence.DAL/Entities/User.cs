@@ -10,6 +10,5 @@ public sealed class User
     public byte[] PasswordSalt { get; set; }
     public string? RefreshToken { get; set; }
 
-    public int RoleId { get; set; }
-    public Role Role { get; set; }
+    public ISet<UserRole> Roles { get; set; }
 }

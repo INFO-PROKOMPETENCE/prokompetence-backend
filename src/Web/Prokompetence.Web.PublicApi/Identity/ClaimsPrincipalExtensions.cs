@@ -7,12 +7,14 @@ public static class ClaimsPrincipalExtensions
 {
     public static UserIdentityModel GetUserIdentityModel(this ClaimsPrincipal source)
     {
-        var claims = source.Claims.ToDictionary(claim => claim.Type, claim => claim.Value);
+        var claims = source.Claims
+            .GroupBy(claim => claim.Type, claim => claim.Value)
+            .ToDictionary(key => key.Key, value => value.ToArray());
         return new UserIdentityModel
         {
-            Id = Guid.Parse(claims[IdentityConstants.Id]),
-            Login = claims[IdentityConstants.Login],
-            Role = claims[IdentityConstants.Role]
+            Id = Guid.Parse(claims[IdentityConstants.Id].Single()),
+            Login = claims[IdentityConstants.Login].Single(),
+            Roles = claims[IdentityConstants.Role]
         };
     }
 }

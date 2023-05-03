@@ -42,16 +42,18 @@ public sealed class UsersService : IUsersService
         var password = request.Password;
         var passwordSalt = CryptographyHelper.GenerateRandomBytes(8);
         var passwordHash = CryptographyHelper.GenerateMd5Hash(password, passwordSalt);
-        var role = await roleRepository.GetByName("User", cancellationToken);
         var user = new User
         {
             Name = request.Name,
             Login = login,
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
-            RoleId = role.Id
         };
         await userRepository.Add(user, cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        var role = await roleRepository.GetByName("User", cancellationToken);
+        await roleRepository.AddRoleForUser(user.Id, role.Id, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
@@ -73,7 +75,7 @@ public sealed class UsersService : IUsersService
         {
             Id = user.Id,
             Login = user.Login,
-            Role = user.Role.Name
+            Roles = user.Roles.Select(r => r.Role.Name).ToArray()
         };
         var accessToken = accessTokenGenerator.GenerateAccessToken(userModel);
         user.RefreshToken = accessToken.RefreshToken;
