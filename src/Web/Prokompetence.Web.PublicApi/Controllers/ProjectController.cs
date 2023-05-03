@@ -1,5 +1,9 @@
-﻿using Mapster;
+﻿using System.Net;
+using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Prokompetence.Model.PublicApi.Exceptions;
+using Prokompetence.Model.PublicApi.Models.Project;
 using Prokompetence.Model.PublicApi.Queries;
 using Prokompetence.Model.PublicApi.Services;
 using Prokompetence.Web.PublicApi.Dto.Common;
@@ -56,5 +60,22 @@ public sealed class ProjectController : ControllerBase
         }
 
         return Ok(project.Adapt<ProjectInformationDto>());
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Customer")]
+    public async Task<IActionResult> AddProject([FromBody] AddProjectBodyDto body, CancellationToken cancellationToken)
+    {
+        var addProjectRequest = body.Adapt<AddProjectRequest>();
+        try
+        {
+            await projectService.AddProject(addProjectRequest, cancellationToken);
+        }
+        catch (HasNoAccessException)
+        {
+            return Forbid();
+        }
+
+        return StatusCode((int)HttpStatusCode.Created);
     }
 }

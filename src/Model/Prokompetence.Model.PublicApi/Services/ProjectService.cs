@@ -1,6 +1,9 @@
 ﻿using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Prokompetence.DAL;
+using Prokompetence.DAL.Entities;
+using Prokompetence.Model.PublicApi.Exceptions;
+using Prokompetence.Model.PublicApi.Interfaces;
 using Prokompetence.Model.PublicApi.Models.Common;
 using Prokompetence.Model.PublicApi.Models.Project;
 using Prokompetence.Model.PublicApi.Queries;
@@ -14,15 +17,18 @@ public interface IProjectService
 
     Task<ProjectHeaderModel?> FindProjectHeaderById(Guid projectId, CancellationToken cancellationToken);
     Task<ProjectInformationModel?> FindProjectInformationById(Guid projectId, CancellationToken cancellationToken);
+    Task AddProject(AddProjectRequest request, CancellationToken cancellationToken);
 }
 
 public sealed class ProjectService : IProjectService
 {
     private readonly IProkompetenceDbContext dbContext;
+    private readonly Func<IContextUserProvider> contextUserProviderFactory;
 
-    public ProjectService(IProkompetenceDbContext dbContext)
+    public ProjectService(IProkompetenceDbContext dbContext, Func<IContextUserProvider> contextUserProviderFactory)
     {
         this.dbContext = dbContext;
+        this.contextUserProviderFactory = contextUserProviderFactory;
     }
 
     public async Task<ListResponseModel<ProjectHeaderModel>> GetProjects(ProjectHeadersQuery queryParams,
@@ -87,5 +93,22 @@ public sealed class ProjectService : IProjectService
             .Where(p => p.Id == projectId)
             .ProjectToType<ProjectInformationModel>()
             .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task AddProject(AddProjectRequest request, CancellationToken cancellationToken)
+    {
+        var currentUser = contextUserProviderFactory.Invoke().GetUser();
+        var organization = await dbContext.UserOrganizationAccesses
+            .Where(o => o.UserId == currentUser.Id && o.OrganizationId == request.OrganizationId)
+            .FirstOrDefaultAsync(cancellationToken);
+        if (!currentUser.Roles.Contains("Customer") || organization is null)
+        {
+            throw new HasNoAccessException();
+        }
+
+        var project = request.Adapt<Project>();
+        project.CuratorId = currentUser.Id;
+        await dbContext.Projects.AddAsync(project, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }
