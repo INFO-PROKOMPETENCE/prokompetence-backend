@@ -11,4 +11,5 @@ public sealed class GetProjectRequestDto : IPagingParams
     public int? KeyTechnologyId { get; set; }
     public bool? IsOpened { get; set; }
     public bool? IsFree { get; set; }
+    public int? Complexity { get; set; }
 }

@@ -54,6 +54,11 @@ public sealed class ProjectService : IProjectService
             query = query.Where(p => p.Name.StartsWith(queryParams.NameStarting));
         }
 
+        if (queryParams.Complexity.HasValue)
+        {
+            query = query.Where(p => p.Complexity == queryParams.Complexity);
+        }
+
         return new ListResponseModel<ProjectHeaderModel>
         {
             Items = await query.Skip(queryParams.Offset ?? 0)

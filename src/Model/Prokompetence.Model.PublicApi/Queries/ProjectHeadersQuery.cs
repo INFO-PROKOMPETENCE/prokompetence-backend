@@ -9,4 +9,5 @@ public sealed class ProjectHeadersQuery
     public int? KeyTechnologyId { get; set; }
     public bool? IsOpened { get; set; }
     public bool? IsFree { get; set; }
+    public int? Complexity { get; set; }
 }

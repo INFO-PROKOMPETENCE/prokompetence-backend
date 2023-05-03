@@ -12,4 +12,5 @@ public class ProjectHeaderModel
     public string CuratorName { get; set; }
     public int LifeScenarioId { get; set; }
     public int KeyTechnologyId { get; set; }
+    public int Complexity { get; set; }
 }
