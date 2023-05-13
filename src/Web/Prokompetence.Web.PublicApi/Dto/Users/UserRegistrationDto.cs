@@ -1,4 +1,6 @@
-﻿namespace Prokompetence.Web.PublicApi.Dto.Users;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Prokompetence.Web.PublicApi.Dto.Users;
 
 /// <summary>
 /// Dto for registration
@@ -7,7 +9,7 @@
 /// <param name="Password"></param>
 /// <param name="Name"></param>
 public sealed record UserRegistrationDto(
-    string Login,
-    string Password,
-    string Name
+    [Required] string Login,
+    [Required] string Password,
+    [Required] string Name
 );
