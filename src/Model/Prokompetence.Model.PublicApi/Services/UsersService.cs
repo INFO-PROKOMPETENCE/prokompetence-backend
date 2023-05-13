@@ -2,6 +2,7 @@
 using Prokompetence.DAL;
 using Prokompetence.DAL.Entities;
 using Prokompetence.DAL.Repositories;
+using Prokompetence.Model.PublicApi.Exceptions;
 using Prokompetence.Model.PublicApi.Interfaces;
 using Prokompetence.Model.PublicApi.Models.Users;
 
@@ -38,7 +39,12 @@ public sealed class UsersService : IUsersService
 
     public async Task RegisterUser(UserRegistrationRequest request, CancellationToken cancellationToken)
     {
-        var login = request.Login;
+        var login = request.Login.ToLower();
+        if (await userRepository.ExistByLogin(login, cancellationToken))
+        {
+            throw new UserExistsException(login);
+        }
+
         var password = request.Password;
         var passwordSalt = CryptographyHelper.GenerateRandomBytes(8);
         var passwordHash = CryptographyHelper.GenerateMd5Hash(password, passwordSalt);

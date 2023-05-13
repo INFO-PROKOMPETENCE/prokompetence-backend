@@ -7,6 +7,7 @@ public interface IUserRepository
 {
     Task Add(User user, CancellationToken cancellationToken);
     Task<User?> FindByLogin(string login, CancellationToken cancellationToken);
+    Task<bool> ExistByLogin(string login, CancellationToken cancellationToken);
 }
 
 public sealed class UserRepository : IUserRepository
@@ -29,4 +30,9 @@ public sealed class UserRepository : IUserRepository
             .ThenInclude(r => r.Role)
             .Where(u => u.Login == login)
             .SingleOrDefaultAsync(cancellationToken);
+
+    public async Task<bool> ExistByLogin(string login, CancellationToken cancellationToken) =>
+        await context.Users
+            .Where(u => u.Login == login)
+            .AnyAsync(cancellationToken);
 }

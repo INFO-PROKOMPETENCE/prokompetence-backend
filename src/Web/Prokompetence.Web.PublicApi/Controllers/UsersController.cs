@@ -2,6 +2,7 @@
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Prokompetence.Model.PublicApi.Exceptions;
 using Prokompetence.Model.PublicApi.Models.Users;
 using Prokompetence.Model.PublicApi.Services;
 using Prokompetence.Web.PublicApi.Dto.Users;
@@ -31,7 +32,15 @@ public sealed class UsersController : ControllerBase
         CancellationToken cancellationToken)
     {
         var userRegistrationRequest = dto.Adapt<UserRegistrationRequest>();
-        await usersService.RegisterUser(userRegistrationRequest, cancellationToken);
+        try
+        {
+            await usersService.RegisterUser(userRegistrationRequest, cancellationToken);
+        }
+        catch (UserExistsException e)
+        {
+            return BadRequest(e.Message);
+        }
+
         return NoContent();
     }
 
