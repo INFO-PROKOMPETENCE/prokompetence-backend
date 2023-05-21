@@ -54,11 +54,7 @@ public sealed class Startup
                 };
             });
         services.AddAuthorization();
-        if (environment.IsDevelopment())
-        {
-            services.AddSwaggerGen(ConfigureSwagger);
-        }
-
+        services.AddSwaggerGen(ConfigureSwagger);
         services.AddHttpContextAccessor();
 
         ConfigureMapster();
@@ -67,15 +63,12 @@ public sealed class Startup
     public void Configure(IApplicationBuilder app)
     {
         app.UseHttpsRedirection();
-        if (environment.IsDevelopment())
+        app.UseSwagger();
+        app.UseSwaggerUI(options =>
         {
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-                options.RoutePrefix = "swagger";
-            });
-        }
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+            options.RoutePrefix = "swagger";
+        });
 
         app.UseRouting();
 
