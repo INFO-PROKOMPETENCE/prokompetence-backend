@@ -1,0 +1,24 @@
+on:
+  push:
+    branches: [ "test" ]
+
+jobs:
+  build-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Login to Yandex Registry
+        uses: yc-actions/yc-cr-login@v0.1-alpha
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }} # авторизационный ключ сервисного аккаунта
+
+      - name: Build, tag, and push image to Yandex Cloud Container Registry
+        env:
+          CR_REGISTRY: crpb0kudcf58ef799cic #id реестра образов
+          CR_REPO: prokompetence-backend
+          IMAGE_TAG: ${{ github.sha }} # в этой переменной хранится хэш последнего коммита
+        run: |
+          docker build -t cr.yandex/$CR_REGISTRY/$CR_REPO:latest .
+          docker push cr.yandex/$CR_REGISTRY/$CR_REPO:latest
