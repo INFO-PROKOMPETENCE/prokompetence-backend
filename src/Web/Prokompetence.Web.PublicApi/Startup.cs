@@ -53,6 +53,12 @@ public sealed class Startup
                     ValidateIssuerSigningKey = true
                 };
             });
+        services.ConfigureApplicationCookie(configure =>
+        {
+            configure.Cookie.HttpOnly = true;
+            configure.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            configure.Cookie.SameSite = SameSiteMode.None;
+        });
         services.AddAuthorization();
         services.AddSwaggerGen(ConfigureSwagger);
         services.AddHttpContextAccessor();
