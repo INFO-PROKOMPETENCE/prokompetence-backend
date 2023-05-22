@@ -77,17 +77,17 @@ public sealed class Startup
             options.RoutePrefix = "swagger";
         });
 
-        app.UseRouting();
-
-        app.UseAuthentication();
-        app.UseAuthorization();
-
         var allowOrigins = configuration.GetSection("Cors:AllowOrigins").Get<string[]>() ?? Array.Empty<string>();
         app.UseCors(builder => builder
             .WithOrigins(allowOrigins)
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials());
+
+        app.UseRouting();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         app.UseEndpoints(endpoints => endpoints.MapControllers());
     }
