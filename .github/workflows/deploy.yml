@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ "test" ]
+    branches: [ "main" ]
 
 jobs:
   build-backend:
