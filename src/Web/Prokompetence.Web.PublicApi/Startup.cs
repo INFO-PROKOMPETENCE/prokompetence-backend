@@ -56,6 +56,7 @@ public sealed class Startup
         services.AddAuthorization();
         services.AddSwaggerGen(ConfigureSwagger);
         services.AddHttpContextAccessor();
+        services.AddCors();
 
         ConfigureMapster();
     }
@@ -75,6 +76,13 @@ public sealed class Startup
         app.UseAuthentication();
         app.UseAuthorization();
 
+        var allowOrigins = configuration.GetSection("Cors:AllowOrigins").Get<string[]>() ?? Array.Empty<string>();
+        app.UseCors(builder => builder
+            .WithOrigins(allowOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
+
         app.UseEndpoints(endpoints => endpoints.MapControllers());
     }
 
@@ -92,7 +100,8 @@ public sealed class Startup
         }
 
         container.Register<IProkompetenceDbContext, PostgresProkompetenceDbContext>(new PerScopeLifetime());
-        container.Register<IUnitOfWork>(factory => factory.GetInstance<IProkompetenceDbContext>(), new PerScopeLifetime());
+        container.Register<IUnitOfWork>(factory => factory.GetInstance<IProkompetenceDbContext>(),
+            new PerScopeLifetime());
         container.Register<IConfiguration>(_ => configuration, new PerContainerLifetime());
         var settingsTypes =
             assemblies.SelectMany(a => a.GetTypes().Where(t => t.GetCustomAttribute<SettingsAttribute>() != null));
