@@ -1,9 +1,9 @@
 ﻿namespace Prokompetence.Model.PublicApi.Models.Customer;
 
-public sealed class RateStudentRequest
+public class RateTeamRequest
 {
-    public Guid StudentId { get; set; }
     public Guid ProjectId { get; set; }
+    public Guid TeamId { get; set; }
     public int Rating { get; set; }
     public string? Comment { get; set; }
 }

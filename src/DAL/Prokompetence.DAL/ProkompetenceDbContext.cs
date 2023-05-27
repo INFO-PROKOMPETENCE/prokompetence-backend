@@ -21,6 +21,7 @@ public interface IProkompetenceDbContext : IUnitOfWork
     DbSet<Iteration> Iterations { get; set; }
     DbSet<ApplicationProperty> ApplicationProperties { get; set; }
     DbSet<StudentRatingInProject> StudentRatingsInProject { get; set; }
+    DbSet<TeamRatingInProject> TeamRatingsInProject { get; set; }
 }
 
 public abstract class ProkompetenceDbContext : DbContext, IProkompetenceDbContext
@@ -46,6 +47,7 @@ public abstract class ProkompetenceDbContext : DbContext, IProkompetenceDbContex
     public DbSet<Iteration> Iterations { get; set; }
     public DbSet<ApplicationProperty> ApplicationProperties { get; set; }
     public DbSet<StudentRatingInProject> StudentRatingsInProject { get; set; }
+    public DbSet<TeamRatingInProject> TeamRatingsInProject { get; set; }
 
 
     public new async Task SaveChangesAsync(CancellationToken cancellationToken)

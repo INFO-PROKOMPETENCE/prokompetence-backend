@@ -8,6 +8,7 @@ namespace Prokompetence.Model.PublicApi.Services;
 public interface ICustomerService
 {
     Task RateStudent(RateStudentRequest request, CancellationToken ct);
+    Task RateTeam(RateTeamRequest request, CancellationToken ct);
 }
 
 public sealed class CustomerService : ICustomerService
@@ -41,6 +42,32 @@ public sealed class CustomerService : ICustomerService
             IterationId = currentIterationId
         };
         await dbContext.StudentRatingsInProject.AddAsync(rating, ct);
+        await dbContext.SaveChangesAsync(ct);
+    }
+
+    public async Task RateTeam(RateTeamRequest request, CancellationToken ct)
+    {
+        var currentIterationId = await GetCurrentIterationId(ct);
+        var ratedInThisIteration = await dbContext.TeamRatingsInProject.Where(
+            r => r.IterationId == currentIterationId
+                 && r.ProjectId == request.ProjectId
+                 && r.TeamId == request.TeamId
+        ).AnyAsync(ct);
+
+        if (ratedInThisIteration)
+        {
+            throw new Exception();
+        }
+
+        var rating = new TeamRatingInProject
+        {
+            TeamId = request.TeamId,
+            ProjectId = request.ProjectId,
+            Rating = request.Rating,
+            Comment = request.Comment,
+            IterationId = currentIterationId
+        };
+        await dbContext.TeamRatingsInProject.AddAsync(rating, ct);
         await dbContext.SaveChangesAsync(ct);
     }
 

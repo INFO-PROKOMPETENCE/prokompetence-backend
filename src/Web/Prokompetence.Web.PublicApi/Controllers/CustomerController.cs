@@ -25,4 +25,12 @@ public sealed class CustomerController : ControllerBase
         var request = body.Adapt<RateStudentRequest>();
         await customerService.RateStudent(request, ct);
     }
+    
+    [HttpPost]
+    [Route("projects/rate-team")]
+    public async Task RateTeam([FromBody] RateTeamDto body, CancellationToken ct)
+    {
+        var request = body.Adapt<RateTeamRequest>();
+        await customerService.RateTeam(request, ct);
+    }
 }
