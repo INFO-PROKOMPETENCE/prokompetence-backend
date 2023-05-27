@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Prokompetence.DAL.SqlServer;
 
@@ -11,9 +12,11 @@ using Prokompetence.DAL.SqlServer;
 namespace Prokompetence.DAL.SqlServer.Migrations
 {
     [DbContext(typeof(SqlServerProkompetenceDbContext))]
-    partial class SqlServerProkompetenceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230527161050_Make_team_role_not_required")]
+    partial class Make_team_role_not_required
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

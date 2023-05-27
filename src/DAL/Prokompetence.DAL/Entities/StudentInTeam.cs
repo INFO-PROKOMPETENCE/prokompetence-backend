@@ -10,8 +10,8 @@ public sealed class StudentInTeam
     public Guid StudentId { get; set; }
     public User Student { get; set; }
 
-    public int RoleId { get; set; }
-    public TeamRole Role { get; set; }
+    public int? RoleId { get; set; }
+    public TeamRole? Role { get; set; }
 
     public bool IsTeamLead { get; set; }
 }
