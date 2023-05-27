@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prokompetence.DAL.Postgres"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prokompetence.Web.Admin", "Web\Prokompetence.Web.Admin\Prokompetence.Web.Admin.csproj", "{7C329CFA-05E2-409E-9C07-01B5FAF278D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prokompetence.Common.Web", "Common\Prokompetence.Common.Web\Prokompetence.Common.Web.csproj", "{0A4B9BC7-2D6D-471E-A42B-0270EAB76A74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,7 @@ Global
 		{DCF52ABB-E9AC-4AC7-ACAF-42EBF465DD36} = {83F3FF8D-5F76-4831-A46F-FB11B3C6582D}
 		{03600A65-1BD9-4C21-83DE-0E779C3CBC16} = {83F3FF8D-5F76-4831-A46F-FB11B3C6582D}
 		{7C329CFA-05E2-409E-9C07-01B5FAF278D7} = {F7283123-1EEF-4002-9219-6117343F7B16}
+		{0A4B9BC7-2D6D-471E-A42B-0270EAB76A74} = {6B138560-8039-40DC-9DD3-A5D45F4F1BCE}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{447B4532-F5E7-42F1-AFAA-50AE953A4B20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -79,5 +82,9 @@ Global
 		{7C329CFA-05E2-409E-9C07-01B5FAF278D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C329CFA-05E2-409E-9C07-01B5FAF278D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C329CFA-05E2-409E-9C07-01B5FAF278D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A4B9BC7-2D6D-471E-A42B-0270EAB76A74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A4B9BC7-2D6D-471E-A42B-0270EAB76A74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A4B9BC7-2D6D-471E-A42B-0270EAB76A74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A4B9BC7-2D6D-471E-A42B-0270EAB76A74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
