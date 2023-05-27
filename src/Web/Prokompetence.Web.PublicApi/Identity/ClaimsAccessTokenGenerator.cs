@@ -3,6 +3,8 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Prokompetence.Common.Configuration;
 using Prokompetence.Common.Security;
+using Prokompetence.Common.Security.Models;
+using Prokompetence.Common.Web;
 using Prokompetence.Model.PublicApi.Interfaces;
 using Prokompetence.Model.PublicApi.Models.Users;
 

@@ -1,8 +1,8 @@
 ﻿using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Prokompetence.Common.Security.Abstractions;
 using Prokompetence.DAL;
 using Prokompetence.DAL.Entities;
-using Prokompetence.Model.PublicApi.Interfaces;
 using Prokompetence.Model.PublicApi.Models.Organization;
 
 namespace Prokompetence.Model.PublicApi.Services;

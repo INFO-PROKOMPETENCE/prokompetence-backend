@@ -1,7 +1,9 @@
-﻿using Prokompetence.Model.PublicApi.Interfaces;
-using Prokompetence.Model.PublicApi.Models.Users;
+﻿using Microsoft.AspNetCore.Http;
+using Prokompetence.Common.Security.Abstractions;
+using Prokompetence.Common.Security.Models;
+using Prokompetence.Common.Web.Extensions;
 
-namespace Prokompetence.Web.PublicApi.Identity;
+namespace Prokompetence.Common.Web.Providers;
 
 public sealed class HttpContextUserProvider : IContextUserProvider
 {

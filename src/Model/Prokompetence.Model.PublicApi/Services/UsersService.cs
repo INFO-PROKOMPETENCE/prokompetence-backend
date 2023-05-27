@@ -1,4 +1,6 @@
 ﻿using Prokompetence.Common.Security;
+using Prokompetence.Common.Security.Abstractions;
+using Prokompetence.Common.Security.Models;
 using Prokompetence.DAL;
 using Prokompetence.DAL.Entities;
 using Prokompetence.DAL.Repositories;

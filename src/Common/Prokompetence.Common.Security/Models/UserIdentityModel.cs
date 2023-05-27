@@ -1,4 +1,4 @@
-﻿namespace Prokompetence.Model.PublicApi.Models.Users;
+﻿namespace Prokompetence.Common.Security.Models;
 
 public sealed class UserIdentityModel
 {

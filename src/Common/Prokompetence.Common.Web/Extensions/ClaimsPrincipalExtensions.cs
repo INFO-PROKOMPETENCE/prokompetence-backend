@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
-using Prokompetence.Model.PublicApi.Models.Users;
+using Prokompetence.Common.Security.Models;
 
-namespace Prokompetence.Web.PublicApi.Identity;
+namespace Prokompetence.Common.Web.Extensions;
 
 public static class ClaimsPrincipalExtensions
 {

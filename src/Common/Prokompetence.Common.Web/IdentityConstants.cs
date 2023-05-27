@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace Prokompetence.Web.PublicApi.Identity;
+namespace Prokompetence.Common.Web;
 
 public static class IdentityConstants
 {

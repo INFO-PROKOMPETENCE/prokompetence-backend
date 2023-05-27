@@ -1,9 +1,9 @@
 ﻿using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Prokompetence.Common.Security.Abstractions;
 using Prokompetence.DAL;
 using Prokompetence.DAL.Entities;
 using Prokompetence.Model.PublicApi.Exceptions;
-using Prokompetence.Model.PublicApi.Interfaces;
 using Prokompetence.Model.PublicApi.Models.Common;
 using Prokompetence.Model.PublicApi.Models.Project;
 using Prokompetence.Model.PublicApi.Queries;

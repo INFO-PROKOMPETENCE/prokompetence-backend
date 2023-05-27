@@ -1,4 +1,5 @@
-﻿using Prokompetence.Model.PublicApi.Models.Users;
+﻿using Prokompetence.Common.Security.Models;
+using Prokompetence.Model.PublicApi.Models.Users;
 
 namespace Prokompetence.Model.PublicApi.Interfaces;
 
