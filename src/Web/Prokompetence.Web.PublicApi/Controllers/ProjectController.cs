@@ -78,4 +78,11 @@ public sealed class ProjectController : ControllerBase
 
         return StatusCode((int)HttpStatusCode.Created);
     }
+
+    [HttpPost]
+    [Route("{projectId:guid}/enroll")]
+    public async Task EnrollTeamToProject([FromRoute] Guid projectId, CancellationToken ct)
+    {
+        await projectService.EnrollTeamToProject(projectId, ct);
+    }
 }

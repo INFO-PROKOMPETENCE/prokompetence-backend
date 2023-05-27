@@ -18,6 +18,7 @@ public interface IProjectService
     Task<ProjectHeaderModel?> FindProjectHeaderById(Guid projectId, CancellationToken cancellationToken);
     Task<ProjectInformationModel?> FindProjectInformationById(Guid projectId, CancellationToken cancellationToken);
     Task AddProject(AddProjectRequest request, CancellationToken cancellationToken);
+    Task EnrollTeamToProject(Guid projectId, CancellationToken cancellationToken);
 }
 
 public sealed class ProjectService : IProjectService
@@ -109,6 +110,41 @@ public sealed class ProjectService : IProjectService
         var project = request.Adapt<Project>();
         project.CuratorId = currentUser.Id;
         await dbContext.Projects.AddAsync(project, cancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task EnrollTeamToProject(Guid projectId, CancellationToken cancellationToken)
+    {
+        var user = contextUserProviderFactory.Invoke().GetUser();
+        var studentInTeam = await dbContext.StudentsInTeam
+            .Where(s => s.StudentId == user.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+        if (studentInTeam is not { IsTeamLead: true })
+        {
+            throw new Exception();
+        }
+
+        var project = await dbContext.Projects
+            .Where(p => p.Id == projectId)
+            .FirstOrDefaultAsync(cancellationToken);
+        if (project is null)
+        {
+            throw new Exception();
+        }
+
+        var enrolledTeamsCount = await dbContext.TeamProjectRecords
+            .Where(r => r.ProjectId == projectId)
+            .CountAsync(cancellationToken);
+        if (project.MaxTeamsCount <= enrolledTeamsCount)
+        {
+            throw new Exception();
+        }
+
+        var teamId = await dbContext.Teams
+            .Where(t => t.Id == studentInTeam.TeamId)
+            .Select(t => t.Id)
+            .FirstAsync(cancellationToken);
+        dbContext.TeamProjectRecords.Add(new TeamProjectRecord { ProjectId = projectId, TeamId = teamId });
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 }
