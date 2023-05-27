@@ -17,6 +17,7 @@ public interface IProkompetenceDbContext : IUnitOfWork
     DbSet<TeamRole> TeamRoles { get; set; }
     DbSet<UserRole> UserRoles { get; set; }
     DbSet<UserOrganizationAccess> UserOrganizationAccesses { get; set; }
+    DbSet<TeamInvitation> TeamInvitations { get; set; }
 }
 
 public abstract class ProkompetenceDbContext : DbContext, IProkompetenceDbContext
@@ -38,6 +39,7 @@ public abstract class ProkompetenceDbContext : DbContext, IProkompetenceDbContex
     public DbSet<TeamRole> TeamRoles { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<UserOrganizationAccess> UserOrganizationAccesses { get; set; }
+    public DbSet<TeamInvitation> TeamInvitations { get; set; }
 
 
     public new async Task SaveChangesAsync(CancellationToken cancellationToken)
