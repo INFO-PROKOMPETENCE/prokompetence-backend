@@ -12,6 +12,7 @@ public interface ITeamService
     Task CreateTeam(string teamName, CancellationToken cancellationToken);
     Task InviteToTeam(Guid teamId, Guid userId, CancellationToken cancellationToken);
     Task<TeamModel[]> GetMyInvitationsToTeams(CancellationToken cancellationToken);
+    Task AcceptInvitationToTeam(Guid teamId, CancellationToken cancellationToken);
 }
 
 public sealed class TeamService : ITeamService
@@ -71,5 +72,22 @@ public sealed class TeamService : ITeamService
         return await teams
             .ProjectToType<TeamModel>()
             .ToArrayAsync(cancellationToken);
+    }
+
+    public async Task AcceptInvitationToTeam(Guid teamId, CancellationToken cancellationToken)
+    {
+        var user = contextUserProviderFactory.Invoke().GetUser();
+        var userInvitations = await dbContext.TeamInvitations
+            .Where(i => i.UserId == user.Id)
+            .ToArrayAsync(cancellationToken);
+        if (userInvitations.All(i => i.TeamId != teamId))
+        {
+            throw new Exception();
+        }
+
+        var studentInTeamRecord = new StudentInTeam { TeamId = teamId, StudentId = user.Id, IsTeamLead = false };
+        await dbContext.StudentsInTeam.AddAsync(studentInTeamRecord, cancellationToken);
+        dbContext.TeamInvitations.RemoveRange(userInvitations);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

@@ -37,4 +37,11 @@ public sealed class TeamController
         var teams = await teamService.GetMyInvitationsToTeams(ct);
         return teams.Adapt<TeamDto[]>();
     }
+
+    [HttpPost]
+    [Route("{teamId:guid}/accept-invite")]
+    public async Task AcceptInviteToTeam([FromRoute] Guid teamId, CancellationToken ct)
+    {
+        await teamService.AcceptInvitationToTeam(teamId, ct);
+    }
 }
