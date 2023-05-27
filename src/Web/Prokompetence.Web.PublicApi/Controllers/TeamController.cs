@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Mapster;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Prokompetence.Model.PublicApi.Services;
 using Prokompetence.Web.PublicApi.Dto.Team;
 
@@ -26,5 +28,13 @@ public sealed class TeamController
     public async Task InviteToTeam([FromBody] InviteToTeamDto body, [FromRoute] Guid teamId, CancellationToken ct)
     {
         await teamService.InviteToTeam(teamId, body.UserId, ct);
+    }
+
+    [HttpGet]
+    [Route("invitations")]
+    public async Task<TeamDto[]> GetMyInvitationsToTeams(CancellationToken ct)
+    {
+        var teams = await teamService.GetMyInvitationsToTeams(ct);
+        return teams.Adapt<TeamDto[]>();
     }
 }

@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Mapster;
+using Microsoft.EntityFrameworkCore;
 using Prokompetence.Common.Security.Abstractions;
 using Prokompetence.DAL;
 using Prokompetence.DAL.Entities;
+using Prokompetence.Model.PublicApi.Models.Team;
 
 namespace Prokompetence.Model.PublicApi.Services;
 
@@ -9,6 +11,7 @@ public interface ITeamService
 {
     Task CreateTeam(string teamName, CancellationToken cancellationToken);
     Task InviteToTeam(Guid teamId, Guid userId, CancellationToken cancellationToken);
+    Task<TeamModel[]> GetMyInvitationsToTeams(CancellationToken cancellationToken);
 }
 
 public sealed class TeamService : ITeamService
@@ -55,5 +58,18 @@ public sealed class TeamService : ITeamService
         await dbContext.TeamInvitations.AddAsync(new TeamInvitation { TeamId = teamId, UserId = userId },
             cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<TeamModel[]> GetMyInvitationsToTeams(CancellationToken cancellationToken)
+    {
+        var user = contextUserProviderFactory.Invoke().GetUser();
+        var invitations = dbContext.TeamInvitations
+            .Where(i => i.UserId == user.Id)
+            .Select(i => i.TeamId);
+        var teams = dbContext.Teams.Where(t => invitations.Contains(t.Id));
+
+        return await teams
+            .ProjectToType<TeamModel>()
+            .ToArrayAsync(cancellationToken);
     }
 }
