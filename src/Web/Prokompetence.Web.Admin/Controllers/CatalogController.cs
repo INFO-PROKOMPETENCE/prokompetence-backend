@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Prokompetence.DAL;
 using Prokompetence.DAL.Entities;
 using Prokompetence.Web.Admin.Dto.Catalog;
@@ -29,6 +28,28 @@ public sealed class CatalogController
                 break;
             case CatalogName.TeamRoles:
                 dbContext.TeamRoles.Add(new TeamRole { Id = body.Id, Name = body.Name });
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(catalogName), catalogName, null);
+        }
+
+        await dbContext.SaveChangesAsync(CancellationToken.None);
+    }
+
+    [HttpDelete]
+    [Route("api/admin/catalogs/{catalogName}/{entryId:int}")]
+    public async Task DeleteCatalogEntry([FromRoute] CatalogName catalogName, int entryId)
+    {
+        switch (catalogName)
+        {
+            case CatalogName.KeyTechnologies:
+                dbContext.KeyTechnologies.Remove(dbContext.KeyTechnologies.First(e => e.Id == entryId));
+                break;
+            case CatalogName.LifeScenarios:
+                dbContext.LifeScenarios.Remove(dbContext.LifeScenarios.First(e => e.Id == entryId));
+                break;
+            case CatalogName.TeamRoles:
+                dbContext.TeamRoles.Remove(dbContext.TeamRoles.First(e => e.Id == entryId));
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(catalogName), catalogName, null);
