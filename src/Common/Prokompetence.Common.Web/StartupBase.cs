@@ -15,7 +15,7 @@ using Prokompetence.Common.BclExtensions;
 using Prokompetence.Common.Configuration;
 using Prokompetence.Common.Security;
 using Prokompetence.DAL;
-using Prokompetence.DAL.Postgres;
+using Prokompetence.DAL.SqlServer;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Prokompetence.Common.Web;
@@ -110,7 +110,7 @@ public abstract class StartupBase
             );
         }
 
-        container.Register<IProkompetenceDbContext, PostgresProkompetenceDbContext>(new PerScopeLifetime());
+        container.Register<IProkompetenceDbContext, SqlServerProkompetenceDbContext>(new PerScopeLifetime());
         container.Register<IUnitOfWork>(factory => factory.GetInstance<IProkompetenceDbContext>(),
             new PerScopeLifetime());
         container.Register<IConfiguration>(_ => configuration, new PerContainerLifetime());
