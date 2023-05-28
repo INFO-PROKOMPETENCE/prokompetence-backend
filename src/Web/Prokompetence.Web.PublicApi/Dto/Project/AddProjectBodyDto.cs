@@ -4,7 +4,7 @@ public sealed record AddProjectBodyDto(
     string Name,
     string Description,
     string FinalProject,
-    string ShortDescription,
+    string Stack,
     int MaxStudentsCountInTeam,
     int MaxTeamsCount,
     bool IsOpened,

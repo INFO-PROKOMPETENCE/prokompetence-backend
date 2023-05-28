@@ -4,7 +4,6 @@ public class ProjectHeaderModel
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
-    public string ShortDescription { get; set; }
     public int MaxStudentsCountInTeam { get; set; }
     public int MaxTeamsCount { get; set; }
     public int RecordedTeamsCount { get; set; }
