@@ -7,5 +7,6 @@ public sealed class ProjectInformationModel
     public string Description { get; set; }
     public string FinalProject { get; set; }
     public string Stack { get; set; }
+    public string CuratorContacts { get; set; }
     public TeamModel[] Teams { get; set; }
 }

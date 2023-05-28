@@ -91,6 +91,7 @@ public sealed class ProjectService : IProjectService
         return await dbContext.Projects.AsNoTracking()
             .Include(p => p.Records)
             .ThenInclude(p => p.Project)
+            .Include(p => p.Curator)
             .Where(p => p.Id == projectId)
             .ProjectToType<ProjectInformationModel>()
             .FirstOrDefaultAsync(cancellationToken);
