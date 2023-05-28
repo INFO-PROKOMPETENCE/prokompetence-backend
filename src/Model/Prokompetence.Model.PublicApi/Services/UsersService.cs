@@ -1,4 +1,5 @@
-﻿using Prokompetence.Common.Security;
+﻿using Microsoft.EntityFrameworkCore;
+using Prokompetence.Common.Security;
 using Prokompetence.Common.Security.Abstractions;
 using Prokompetence.Common.Security.Models;
 using Prokompetence.DAL;
@@ -16,6 +17,7 @@ public interface IUsersService
     Task<SignInResult> SignIn(string login, string password, CancellationToken cancellationToken);
     Task<RefreshTokenResult> RefreshToken(string refreshToken, CancellationToken cancellationToken);
     Task<UserModel> GetUserByLogin(string login, CancellationToken cancellationToken);
+    Task SetContacts(string contacts, CancellationToken cancellationToken);
 }
 
 public sealed class UsersService : IUsersService
@@ -25,18 +27,21 @@ public sealed class UsersService : IUsersService
     private readonly IAccessTokenGenerator accessTokenGenerator;
     private readonly Func<IContextUserProvider> contextUserProviderFactory;
     private readonly IUnitOfWork unitOfWork;
+    private readonly IProkompetenceDbContext dbContext;
 
     public UsersService(IUserRepository userRepository,
         IRoleRepository roleRepository,
         IAccessTokenGenerator accessTokenGenerator,
         Func<IContextUserProvider> contextUserProviderFactory,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IProkompetenceDbContext dbContext)
     {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.accessTokenGenerator = accessTokenGenerator;
         this.contextUserProviderFactory = contextUserProviderFactory;
         this.unitOfWork = unitOfWork;
+        this.dbContext = dbContext;
     }
 
     public async Task RegisterUser(UserRegistrationRequest request, CancellationToken cancellationToken)
@@ -126,5 +131,15 @@ public sealed class UsersService : IUsersService
         {
             Name = user.Name
         };
+    }
+
+    public async Task SetContacts(string contacts, CancellationToken cancellationToken)
+    {
+        var user = contextUserProviderFactory.Invoke().GetUser();
+        var userEntity = await dbContext.Users
+            .Where(u => u.Id == user.Id)
+            .FirstAsync(cancellationToken);
+        userEntity.Contacts = contacts;
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

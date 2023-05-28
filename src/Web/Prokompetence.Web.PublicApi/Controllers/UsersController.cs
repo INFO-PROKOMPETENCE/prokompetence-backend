@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Prokompetence.Model.PublicApi.Exceptions;
 using Prokompetence.Model.PublicApi.Models.Users;
 using Prokompetence.Model.PublicApi.Services;
+using Prokompetence.Web.PublicApi.Dto.Contacts;
 using Prokompetence.Web.PublicApi.Dto.Users;
 
 namespace Prokompetence.Web.PublicApi.Controllers;
@@ -98,5 +99,12 @@ public sealed class UsersController : ControllerBase
         var login = User.Claims.Single(c => c.Type == ClaimTypes.Name).Value;
         var user = await usersService.GetUserByLogin(login, cancellationToken);
         return Ok(user.Adapt<UserDto>());
+    }
+
+    [HttpPost]
+    [Route("contacts")]
+    public async Task SetContacts([FromBody] SetContactsDto body, CancellationToken ct)
+    {
+        await usersService.SetContacts(body.Contacts, ct);
     }
 }
