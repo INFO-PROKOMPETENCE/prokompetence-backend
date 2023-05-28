@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Prokompetence.DAL.SqlServer;
 
@@ -11,9 +12,11 @@ using Prokompetence.DAL.SqlServer;
 namespace Prokompetence.DAL.SqlServer.Migrations
 {
     [DbContext(typeof(SqlServerProkompetenceDbContext))]
-    partial class SqlServerProkompetenceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230528135334_FinalProject_to_Target")]
+    partial class FinalProject_to_Target
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,10 +122,6 @@ namespace Prokompetence.DAL.SqlServer.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ExpectedResults")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
