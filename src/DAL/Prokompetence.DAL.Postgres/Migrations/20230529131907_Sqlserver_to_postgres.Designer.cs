@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prokompetence.DAL.Postgres;
@@ -11,9 +12,11 @@ using Prokompetence.DAL.Postgres;
 namespace Prokompetence.DAL.Postgres.Migrations
 {
     [DbContext(typeof(PostgresProkompetenceDbContext))]
-    partial class PostgresProkompetenceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230529131907_Sqlserver_to_postgres")]
+    partial class Sqlserver_to_postgres
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
