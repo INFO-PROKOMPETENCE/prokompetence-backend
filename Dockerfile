@@ -22,4 +22,4 @@ FROM mcr.microsoft.com/dotnet/aspnet:7.0 as runtime
 WORKDIR ./publish
 COPY --from=build-env /publish .
 EXPOSE 80
-CMD dotnet Prokompetence.Web.PublicApi.dll ConnectionStrings:Prokompetence="Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USERNAME};Password=${DB_PASSWORD};Ssl Mode=Require;" Authentication:Key="${JWT_SECRET}"
+CMD dotnet Prokompetence.Web.PublicApi.dll ConnectionStrings:PostgresProkompetence="Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};Username=${DB_USERNAME};Password=${DB_PASSWORD};Ssl Mode=Require;" Authentication:Key="${JWT_SECRET}"
