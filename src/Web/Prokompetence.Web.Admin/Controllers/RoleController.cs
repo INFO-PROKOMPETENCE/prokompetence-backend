@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Prokompetence.DAL;
 using Prokompetence.DAL.Entities;
 using Prokompetence.Web.Admin.Dto.Role;
@@ -24,5 +25,15 @@ public class RoleController
             dbContext.UserRoles.Add(new UserRole { RoleId = role.Id, UserId = body.UserId });
             await dbContext.SaveChangesAsync(CancellationToken.None);
         }
+    }
+
+    [HttpGet]
+    [Route("api/admin/users/{userId:guid}/roles")]
+    public async Task<Role[]> GetUserRoles([FromRoute] Guid userId)
+    {
+        return await dbContext.UserRoles
+            .Where(ur => ur.UserId == userId)
+            .Select(ur => ur.Role)
+            .ToArrayAsync();
     }
 }

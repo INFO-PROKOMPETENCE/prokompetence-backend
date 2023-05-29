@@ -29,8 +29,8 @@ public sealed class IterationController : ControllerBase
     {
         var iterationEntity = new Iteration
         {
-            StartTime = body.StartDate,
-            EndTime = body.EndDate,
+            StartTime = body.StartDate.ToUniversalTime(),
+            EndTime = body.EndDate.ToUniversalTime(),
             Description = body.Description
         };
 
