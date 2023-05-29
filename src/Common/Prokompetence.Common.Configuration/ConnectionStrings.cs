@@ -1,4 +1,4 @@
 ﻿namespace Prokompetence.Common.Configuration;
 
 [Settings]
-public sealed record ConnectionStrings(string Prokompetence);
+public sealed record ConnectionStrings(string SqlServerProkompetence, string PostgresProkompetence);

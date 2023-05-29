@@ -9,7 +9,7 @@ namespace Prokompetence.DAL.Postgres;
 public sealed class PostgresProkompetenceDbContext : ProkompetenceDbContext
 {
     public PostgresProkompetenceDbContext(ConnectionStrings connectionStrings)
-        : this(Options(connectionStrings.Prokompetence))
+        : this(Options(connectionStrings.PostgresProkompetence))
     {
     }
 

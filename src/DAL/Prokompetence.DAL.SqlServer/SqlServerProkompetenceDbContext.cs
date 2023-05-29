@@ -6,7 +6,7 @@ namespace Prokompetence.DAL.SqlServer;
 public sealed class SqlServerProkompetenceDbContext : ProkompetenceDbContext
 {
     public SqlServerProkompetenceDbContext(ConnectionStrings connectionStrings)
-        : this(Options(connectionStrings.Prokompetence))
+        : this(Options(connectionStrings.SqlServerProkompetence))
     {
     }
 

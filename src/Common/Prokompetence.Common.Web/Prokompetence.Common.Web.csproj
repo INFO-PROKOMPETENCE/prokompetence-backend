@@ -16,6 +16,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\DAL\Prokompetence.DAL.Postgres\Prokompetence.DAL.Postgres.csproj" />
+      <ProjectReference Include="..\..\DAL\Prokompetence.DAL.SqlServer\Prokompetence.DAL.SqlServer.csproj" />
       <ProjectReference Include="..\..\DAL\Prokompetence.DAL\Prokompetence.DAL.csproj" />
       <ProjectReference Include="..\Prokompetence.Common.BclExtensions\Prokompetence.Common.BclExtensions.csproj" />
       <ProjectReference Include="..\Prokompetence.Common.Configuration\Prokompetence.Common.Configuration.csproj" />
