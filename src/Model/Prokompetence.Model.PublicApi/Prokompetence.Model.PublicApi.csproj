@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Clients\Prokompetence.Clients.GitHub\Prokompetence.Clients.GitHub.csproj" />
       <ProjectReference Include="..\..\Common\Prokompetence.Common.Security\Prokompetence.Common.Security.csproj" />
       <ProjectReference Include="..\..\DAL\Prokompetence.DAL\Prokompetence.DAL.csproj" />
     </ItemGroup>

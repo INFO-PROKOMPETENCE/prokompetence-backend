@@ -31,6 +31,9 @@
       <None Update="CA2.pem">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="github-secret-key.pem">
+         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

@@ -26,4 +26,6 @@ public sealed class Project
 
     public ISet<TeamProjectRecord> Records { get; set; }
     public int Complexity { get; set; }
+
+    public GitHubIntegration? GitHubIntegration { get; set; }
 }

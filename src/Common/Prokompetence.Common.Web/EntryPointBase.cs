@@ -2,6 +2,7 @@
 using LightInject.Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Prokompetence.Common.BclExtensions;
 using Prokompetence.Common.Configuration;
 
@@ -17,6 +18,14 @@ public static class EntryPointBase
         LoadReferencesProjects(assemblies);
 
         WebHost.CreateDefaultBuilder<TStartup>(args)
+            .ConfigureAppConfiguration(app =>
+            {
+                const string settingsPath = "localsettings.json";
+                if (File.Exists(settingsPath))
+                {
+                    app.AddJsonFile(settingsPath);
+                }
+            })
             .UseLightInject()
             .Build()
             .Run();

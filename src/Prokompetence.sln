@@ -28,6 +28,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prokompetence.Web.Admin", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prokompetence.Common.Web", "Common\Prokompetence.Common.Web\Prokompetence.Common.Web.csproj", "{0A4B9BC7-2D6D-471E-A42B-0270EAB76A74}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{D3B0A257-02C0-4789-A2F3-C0DADF98C0EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prokompetence.Clients.GitHub", "Clients\Prokompetence.Clients.GitHub\Prokompetence.Clients.GitHub.csproj", "{1A4B1D34-31F4-427A-A88A-02B82B82A2AC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +48,7 @@ Global
 		{03600A65-1BD9-4C21-83DE-0E779C3CBC16} = {83F3FF8D-5F76-4831-A46F-FB11B3C6582D}
 		{7C329CFA-05E2-409E-9C07-01B5FAF278D7} = {F7283123-1EEF-4002-9219-6117343F7B16}
 		{0A4B9BC7-2D6D-471E-A42B-0270EAB76A74} = {6B138560-8039-40DC-9DD3-A5D45F4F1BCE}
+		{1A4B1D34-31F4-427A-A88A-02B82B82A2AC} = {D3B0A257-02C0-4789-A2F3-C0DADF98C0EA}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{447B4532-F5E7-42F1-AFAA-50AE953A4B20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -86,5 +91,9 @@ Global
 		{0A4B9BC7-2D6D-471E-A42B-0270EAB76A74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A4B9BC7-2D6D-471E-A42B-0270EAB76A74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A4B9BC7-2D6D-471E-A42B-0270EAB76A74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A4B1D34-31F4-427A-A88A-02B82B82A2AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A4B1D34-31F4-427A-A88A-02B82B82A2AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A4B1D34-31F4-427A-A88A-02B82B82A2AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A4B1D34-31F4-427A-A88A-02B82B82A2AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
