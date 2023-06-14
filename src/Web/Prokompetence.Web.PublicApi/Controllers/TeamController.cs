@@ -16,12 +16,23 @@ public sealed class TeamController : ControllerBase
         this.teamService = teamService;
     }
 
+    /// <summary>
+    /// Создать команду
+    /// </summary>
+    /// <param name="body"></param>
+    /// <param name="ct"></param>
     [HttpPost]
     public async Task CreateTeam([FromBody] CreateTeamDto body, CancellationToken ct)
     {
         await teamService.CreateTeam(body.Name, ct);
     }
 
+    /// <summary>
+    /// Пригласить нового человека в команду
+    /// </summary>
+    /// <param name="body"></param>
+    /// <param name="teamId"></param>
+    /// <param name="ct"></param>
     [HttpPost]
     [Route("{teamId:guid}/invite")]
     public async Task InviteToTeam([FromBody] InviteToTeamDto body, [FromRoute] Guid teamId, CancellationToken ct)
@@ -29,6 +40,11 @@ public sealed class TeamController : ControllerBase
         await teamService.InviteToTeam(teamId, body.UserId, ct);
     }
 
+    /// <summary>
+    /// Получить список приглашений в команды
+    /// </summary>
+    /// <param name="ct"></param>
+    /// <returns></returns>
     [HttpGet]
     [Route("invitations")]
     public async Task<TeamDto[]> GetMyInvitationsToTeams(CancellationToken ct)
@@ -37,6 +53,11 @@ public sealed class TeamController : ControllerBase
         return teams.Adapt<TeamDto[]>();
     }
 
+    /// <summary>
+    /// Принять приглашение в команду (заявка приходит пользователю от команды, пользователь принимает)
+    /// </summary>
+    /// <param name="teamId"></param>
+    /// <param name="ct"></param>
     [HttpPost]
     [Route("{teamId:guid}/accept-invite")]
     public async Task AcceptInviteToTeam([FromRoute] Guid teamId, CancellationToken ct)
@@ -44,6 +65,11 @@ public sealed class TeamController : ControllerBase
         await teamService.AcceptInvitationToTeam(teamId, ct);
     }
 
+    /// <summary>
+    /// Получить информацию о своей команде
+    /// </summary>
+    /// <param name="ct"></param>
+    /// <returns></returns>
     [HttpGet]
     [Route("my")]
     public async Task<ActionResult<TeamDto>> GetMyTeam(CancellationToken ct)
