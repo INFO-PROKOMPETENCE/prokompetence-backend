@@ -43,6 +43,24 @@ namespace Prokompetence.DAL.Postgres.Migrations
                     b.ToTable("ApplicationProperties");
                 });
 
+            modelBuilder.Entity("Prokompetence.DAL.Entities.GitHubIntegration", b =>
+                {
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("OwnerName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("RepositoryName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ProjectId");
+
+                    b.ToTable("GitHubIntegrations");
+                });
+
             modelBuilder.Entity("Prokompetence.DAL.Entities.Iteration", b =>
                 {
                     b.Property<Guid>("Id")
@@ -443,6 +461,17 @@ namespace Prokompetence.DAL.Postgres.Migrations
                     b.ToTable("UserRoles");
                 });
 
+            modelBuilder.Entity("Prokompetence.DAL.Entities.GitHubIntegration", b =>
+                {
+                    b.HasOne("Prokompetence.DAL.Entities.Project", "Project")
+                        .WithOne("GitHubIntegration")
+                        .HasForeignKey("Prokompetence.DAL.Entities.GitHubIntegration", "ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("Prokompetence.DAL.Entities.Project", b =>
                 {
                     b.HasOne("Prokompetence.DAL.Entities.User", "Curator")
@@ -569,6 +598,8 @@ namespace Prokompetence.DAL.Postgres.Migrations
 
             modelBuilder.Entity("Prokompetence.DAL.Entities.Project", b =>
                 {
+                    b.Navigation("GitHubIntegration");
+
                     b.Navigation("Records");
                 });
 

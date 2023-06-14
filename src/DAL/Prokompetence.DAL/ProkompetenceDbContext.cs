@@ -22,6 +22,7 @@ public interface IProkompetenceDbContext : IUnitOfWork
     DbSet<ApplicationProperty> ApplicationProperties { get; set; }
     DbSet<StudentRatingInProject> StudentRatingsInProject { get; set; }
     DbSet<TeamRatingInProject> TeamRatingsInProject { get; set; }
+    DbSet<GitHubIntegration> GitHubIntegrations { get; set; }
 }
 
 public abstract class ProkompetenceDbContext : DbContext, IProkompetenceDbContext
@@ -48,6 +49,7 @@ public abstract class ProkompetenceDbContext : DbContext, IProkompetenceDbContex
     public DbSet<ApplicationProperty> ApplicationProperties { get; set; }
     public DbSet<StudentRatingInProject> StudentRatingsInProject { get; set; }
     public DbSet<TeamRatingInProject> TeamRatingsInProject { get; set; }
+    public DbSet<GitHubIntegration> GitHubIntegrations { get; set; }
 
 
     public new async Task SaveChangesAsync(CancellationToken cancellationToken)
