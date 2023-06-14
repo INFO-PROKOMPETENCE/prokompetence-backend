@@ -392,6 +392,9 @@ namespace Prokompetence.DAL.SqlServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AcademicGroup")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Contacts")
                         .HasColumnType("nvarchar(max)");
 

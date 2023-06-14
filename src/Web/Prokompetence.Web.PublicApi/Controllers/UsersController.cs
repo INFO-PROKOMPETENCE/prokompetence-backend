@@ -107,4 +107,11 @@ public sealed class UsersController : ControllerBase
     {
         await usersService.SetContacts(body.Contacts, ct);
     }
+
+    [HttpPost]
+    [Route("academic-group")]
+    public async Task SetAcademicGroup([FromBody] SecAcademicGroupDto body, CancellationToken ct)
+    {
+        await usersService.SetAcademicGroup(body.AcademicGroup, ct);
+    }
 }

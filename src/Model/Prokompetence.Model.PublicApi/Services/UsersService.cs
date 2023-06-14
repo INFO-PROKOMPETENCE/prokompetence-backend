@@ -18,6 +18,7 @@ public interface IUsersService
     Task<RefreshTokenResult> RefreshToken(string refreshToken, CancellationToken cancellationToken);
     Task<UserModel> GetUserByLogin(string login, CancellationToken cancellationToken);
     Task SetContacts(string contacts, CancellationToken cancellationToken);
+    Task SetAcademicGroup(string academicGroup, CancellationToken ct);
 }
 
 public sealed class UsersService : IUsersService
@@ -141,5 +142,15 @@ public sealed class UsersService : IUsersService
             .FirstAsync(cancellationToken);
         userEntity.Contacts = contacts;
         await dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task SetAcademicGroup(string academicGroup, CancellationToken ct)
+    {
+        var user = contextUserProviderFactory.Invoke().GetUser();
+        var userEntity = await dbContext.Users
+            .Where(u => u.Id == user.Id)
+            .FirstAsync(ct);
+        userEntity.AcademicGroup = academicGroup;
+        await dbContext.SaveChangesAsync(ct);
     }
 }

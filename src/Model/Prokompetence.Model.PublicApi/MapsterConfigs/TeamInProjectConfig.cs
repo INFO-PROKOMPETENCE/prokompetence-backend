@@ -10,6 +10,7 @@ public sealed class TeamInProjectConfig : IRegister
     public void Register(TypeAdapterConfig config)
     {
         config.NewConfig<Team, TeamModel>()
-            .Map(dest => dest.TeamId, source => source.Id);
+            .Map(dest => dest.TeamId, source => source.Id)
+            .Map(dest => dest.ProjectId, source => source.Records.First().ProjectId);
     }
 }

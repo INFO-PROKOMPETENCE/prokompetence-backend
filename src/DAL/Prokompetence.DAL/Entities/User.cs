@@ -4,6 +4,7 @@ public sealed class User
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
+    public string? AcademicGroup { get; set; }
     public string? Contacts { get; set; }
 
     public string Login { get; set; }
