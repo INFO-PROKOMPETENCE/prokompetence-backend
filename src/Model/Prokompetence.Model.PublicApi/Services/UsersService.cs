@@ -130,7 +130,9 @@ public sealed class UsersService : IUsersService
 
         return new UserModel
         {
-            Name = user.Name
+            Name = user.Name,
+            Contacts = user.Contacts,
+            AcademicGroup = user.AcademicGroup
         };
     }
 
